@@ -1,14 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import DashboardView from '@/views/master/DashboardView.vue'
+import DashboardView from '@/views/master/TADashboardView.vue'
 import CourseView from '@/views/CourseView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import HomeView from '@/views/HomeView.vue'
 import NotificationView from '@/views/NotificationView.vue'
 import CalwageView from '@/views/CalwageView.vue'
 import FormView from '@/views/FormView.vue'
+import LoginView from '@/views/LoginView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      name: 'login',
+      path: '/login', 
+      component: LoginView 
+    },
     {
       path: '/',
       name: 'dashboard',
@@ -43,7 +49,7 @@ const router = createRouter({
           name: 'form',
           path: '/form', 
           component: FormView 
-        },
+        }
       ]
     }
   ]
