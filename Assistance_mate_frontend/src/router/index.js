@@ -7,6 +7,7 @@ import NotificationView from '@/views/NotificationView.vue'
 import CalwageView from '@/views/CalwageView.vue'
 import FormView from '@/views/FormView.vue'
 import LoginView from '@/views/LoginView.vue'
+import AttendanceView from '@/views/AttendanceView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -49,6 +50,11 @@ const router = createRouter({
           name: 'form',
           path: '/form', 
           component: FormView 
+        },
+        {
+          name: 'attendance',
+          path: '/attendance', 
+          component: AttendanceView
         }
       ]
     }
