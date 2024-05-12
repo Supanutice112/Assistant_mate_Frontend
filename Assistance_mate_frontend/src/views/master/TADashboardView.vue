@@ -3,11 +3,11 @@
         <!-- Sidebar -->
         <div class="w-[400px] h-full bg-gray-200 text-white " v-show="showSide" >
             <div class="h-[50px] bg-gray-900 flex justify-start  items-center ">
-                <div class="px-[20px]">
+                <div class="px-[20px] flex">
                 <h3 class="font-bold text-xl">Dashboard</h3>
             </div>
         </div>
-        <div class="h-[calc(100vh-50px)] bg-gray-800 py-[20px]">
+        <div class="h-[calc(100vh-50px)] bg-gray-800 py-[20px] flex">
             <div class="flex flex-col justify-between h-full px-[20px] space-y-[10px]">
                 <div class=" flex flex-col justify-between space-y-[10px]">
                             <router-link to="/home" class="inline-flex relative items-center py-[10px] px-[10px] w-full text-sm font-medium rounded-md border-gray-200 hover:bg-gray-200 hover:text-gray-800  transition duration-400 ease-in-out">
@@ -47,16 +47,6 @@
                                 Generate Disbursement Form
                             </router-link>
                         </div>
-                        <div class="h-[50px]">
-                        <div>
-                            <router-link to="/setting" class="inline-flex relative items-center py-[10px] px-[10px] w-full text-sm font-medium rounded-md border-gray-200 hover:bg-gray-300 hover:text-gray-800  transition duration-400 ease-in-out">
-                              <svg aria-hidden="true" class="mr-2 w-[25px] h-[25px] fill-current" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path>
-                              </svg>
-                              Setting
-                            </router-link>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -97,8 +87,7 @@
                             <div class="py-1 text-left" role="none">
                                 <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
                                 <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Account settings</a>
-                                <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Account settings</a>
-                                <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Account settings</a>
+
                                 <form method="POST" action="#" role="none">
                                     <button type="submit" class="text-gray-700 block w-full px-4 py-2 text-left text-sm" role="menuitem" tabindex="-1" id="menu-item-3">Sign out</button>
                                 </form>

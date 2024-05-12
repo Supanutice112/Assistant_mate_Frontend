@@ -1,33 +1,31 @@
 <template>
-  <div class="attendance-view">
-    <h1>Attendance Dashboard</h1>
-    <div v-if="loading">
-      Loading...
-    </div>
-    <div v-else>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Check-in Time</th>
-            <th>Name</th>
-            <th>Check-out Time</th>
-            <th>Hours Worked</th>
-            <th>Course</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="record in attendanceRecords" :key="record.id">
-            <td>{{ record.date }}</td>
-            <td>{{ record.checkIn }}</td>
-            <td>{{ record.name }}</td>
-            <td>{{ record.checkOut }}</td>
-            <td>{{ calculateHours(record.checkIn, record.checkOut) }}</td>
-            <td>{{ record.course }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="ta-check-attendance">
+    <h1>TA Check Attendance</h1>
+    <form @submit.prevent="submitCheckIn">
+      <label for="date">Date:</label>
+      <input type="date" id="date" v-model="checkInData.date" required>
+
+      <label for="startTime">Start Time:</label>
+      <input type="time" id="startTime" v-model="checkInData.startTime" required>
+
+      <label for="endTime">End Time:</label>
+      <input type="time" id="endTime" v-model="checkInData.endTime" required>
+
+      <button type="submit" :disabled="loading">Check In</button>
+    </form>
+
+    <p v-if="message">{{ message }}</p>
+
+    <h2>Your Check-ins</h2>
+    <ul>
+      <li v-for="(record, index) in checkIns" :key="index">
+        <p><strong>Date:</strong> {{ record.date }}</p>
+        <p><strong>Start Time:</strong> {{ record.startTime }}</p>
+        <p><strong>End Time:</strong> {{ record.endTime }}</p>
+        <p><strong>Status:</strong> {{ record.status }}</p>
+      </li>
+    </ul>
+    <p v-if="checkIns.length === 0">No check-ins recorded.</p>
   </div>
 </template>
 
@@ -35,53 +33,83 @@
 import axios from 'axios';
 
 export default {
+  name: 'TACheckAttendanceView',
   data() {
     return {
-      loading: true,
-      attendanceRecords: []
+      checkInData: {
+        date: '',
+        startTime: '',
+        endTime: ''
+      },
+      checkIns: [],
+      loading: false,
+      message: ''
     };
   },
-  mounted() {
-    this.fetchAttendance();
-  },
   methods: {
-    fetchAttendance() {
-      axios.get('/api/attendance')
+  submitCheckIn() {
+    this.loading = true;
+    axios.post('/api/ta/check-in', this.checkInData)
+      .then(response => {
+        if (response && response.data) {
+          this.message = 'Check-in recorded successfully. Waiting for approval.';
+          // Push the submitted data into checkIns array
+          this.checkIns.push({ ...this.checkInData, status: 'Pending' });
+          // Reset form
+          this.checkInData = { date: '', startTime: '', endTime: '' };
+        } else {
+          console.log('Unexpected response structure:', response);
+          this.message = 'Unexpected response structure. Please check the console for more details.';
+        }
+      })
+      .catch(error => {
+        console.log('Error while submitting check-in:', error);
+        this.message = 'Error recording check-in: ' + (error.response && error.response.data ? error.response.data.message : error.message);
+      })
+      .finally(() => {
+        this.loading = false;
+      });
+  },
+
+    fetchCheckIns() {
+      axios.get('')
         .then(response => {
-          this.attendanceRecords = response.data;
-          this.loading = false;
+          if (response && response.data) {
+            this.checkIns = response.data;
+          } else {
+            console.log('Unexpected response structure when fetching check-ins:', response);
+          }
         })
         .catch(error => {
-          console.error('There was an error fetching the attendance data:', error);
-          this.loading = false;
+          console.error('Error fetching check-ins:', error);
         });
-    },
-    editRecord(id) {
-      // Navigate to edit page or handle inline edit
-      console.log('Edit record', id);
-    },
-    calculateHours(checkIn, checkOut) {
-      // Placeholder for time calculation logic
-      const inTime = new Date('1970/01/01 ' + checkIn);
-      const outTime = new Date('1970/01/01 ' + checkOut);
-      const diff = (outTime - inTime) / (1000 * 60 * 60);
-      return diff.toFixed(2); // Returns the duration in hours with two decimal places
     }
+  },
+  created() {
+    this.fetchCheckIns();
   }
 };
 </script>
 
 <style scoped>
-.attendance-view {
+.ta-check-attendance {
+  max-width: 600px;
+  margin: auto;
   padding: 20px;
-  background-color: #f5f5f5;
 }
-table {
+label {
+  display: block;
+  margin-top: 10px;
+}
+input, button {
   width: 100%;
-  border-collapse: collapse;
+  padding: 8px;
+  margin-top: 5px;
 }
-th, td {
+li {
+  margin-top: 10px;
   padding: 10px;
-  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
 }
 </style>
