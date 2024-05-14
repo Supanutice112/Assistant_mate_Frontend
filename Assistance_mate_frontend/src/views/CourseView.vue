@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="overflow-x-auto">
-      <table class="table">
+      <table class="table w-full">
         <!-- head -->
         <thead>
           <tr>
@@ -31,7 +31,7 @@
                 class="badge badge-ghost badge-sm"
                 :class="{'badge-accent': course.international, 'badge-info': !course.international}"
               >
-                {{ course.international ? 'International' : 'Thai' }}
+                {{ course.international ? 'International' : 'Local' }}
               </span>
             </td>
             <td>{{ course.time }}</td>
@@ -48,33 +48,27 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
-  name: 'CourseTable',
+  name: 'CoursePage',
   data() {
     return {
-      //สร้างdataทดลอง01
-      courses: [
-        {  
-          name: 'PROGRAMMING LOGICAL THINKING',
-          id: '511021',
-          professor: 'Supanut Maneeyot',
-          time: '11:00 AM - 13:00 PM',
-          international: true,
-        },
-        {
-          name: 'DATA STRUCTURES',
-          id: '511022',
-          professor: 'John Doe',
-          time: '10:00 AM - 12:00 PM',
-          international: false,
-        },
-      ],
+      courses: [],
     };
   },
+  async created() {
+    await this.getCourses();
+  },
   methods: {
-    // Add methods to handle different actions
-    goToAttendance(courseId) {
-      this.$router.push(`/attendance/${courseId}`);
+    async getCourses() {
+      const path = 'http://127.0.0.1:5000/courses'; // Ensure this matches the updated Flask route
+      try {
+        const response = await axios.get(path);
+        this.courses = response.data.courses;
+      } catch (error) {
+        console.error('Failed to fetch courses:', error);
+        alert('Failed to load courses. Please try again later.');
+      }
     },
   },
 };
