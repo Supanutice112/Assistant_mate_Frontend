@@ -3,21 +3,23 @@
     <h1>TA Check Attendance</h1>
     <form @submit.prevent="submitCheckIn">
       <label for="date">Date:</label>
-      <input type="date" id="date" v-model="checkInData.date" required>
+      <input type="date" id="date" v-model.trim="checkInData.date" required>
 
       <label for="startTime">Start Time:</label>
-      <input type="time" id="startTime" v-model="checkInData.startTime" required>
+      <input type="time" id="startTime" v-model.trim="checkInData.startTime" required>
 
       <label for="endTime">End Time:</label>
-      <input type="time" id="endTime" v-model="checkInData.endTime" required>
-
-      <button type="submit" :disabled="loading">Check In</button>
+      <input type="time" id="endTime" v-model.trim="checkInData.endTime" required>
+      <button class="btn btn-active btn-secondary" type="submit" :disabled="loading">
+        <span v-if="loading">Processing...</span>
+        <span v-else>Check Attendance</span>
+      </button>
     </form>
 
-    <p v-if="message">{{ message }}</p>
+    <p v-if="message" class="message">{{ message }}</p>
 
-    <h2>Your Check-ins</h2>
-    <ul>
+    <h1 >Your Attendance</h1>
+    <ul v-if="checkIns.length > 0">
       <li v-for="(record, index) in checkIns" :key="index">
         <p><strong>Date:</strong> {{ record.date }}</p>
         <p><strong>Start Time:</strong> {{ record.startTime }}</p>
@@ -25,7 +27,7 @@
         <p><strong>Status:</strong> {{ record.status }}</p>
       </li>
     </ul>
-    <p v-if="checkIns.length === 0">No check-ins recorded.</p>
+    <p v-else>No Attendance recorded.</p>
   </div>
 </template>
 
@@ -47,37 +49,42 @@ export default {
     };
   },
   methods: {
-  submitCheckIn() {
-    this.loading = true;
-    axios.post('/api/ta/check-in', this.checkInData)
-      .then(response => {
-        if (response && response.data) {
-          this.message = 'Check-in recorded successfully. Waiting for approval.';
-          // Push the submitted data into checkIns array
-          this.checkIns.push({ ...this.checkInData, status: 'Pending' });
-          // Reset form
-          this.checkInData = { date: '', startTime: '', endTime: '' };
-        } else {
-          console.log('Unexpected response structure:', response);
-          this.message = 'Unexpected response structure. Please check the console for more details.';
-        }
-      })
-      .catch(error => {
-        console.log('Error while submitting check-in:', error);
-        this.message = 'Error recording check-in: ' + (error.response && error.response.data ? error.response.data.message : error.message);
-      })
-      .finally(() => {
-        this.loading = false;
-      });
-  },
+    submitCheckIn() {
+      // Validate that the start time is before the end time
+      if (this.checkInData.startTime >= this.checkInData.endTime) {
+        this.message = "Start Time must be before End Time";
+        return;
+      }
+      
+      this.loading = true;
+      // Adjust the URL below to match your Flask app's location and port
+      axios.post('http://localhost:5000/api/ta/check-in', this.checkInData)
+        .then(response => {
+          if (response.data && response.status === 201) {
+            this.message = 'Attendance recorded successfully. Waiting for approval.';
+            this.checkIns.push({ ...this.checkInData, status: 'Pending' });
+            this.checkInData = { date: '', startTime: '', endTime: '' };
+          } else {
+            this.message = 'Unexpected response from the server. Please try again.';
+          }
+        })
+        .catch(error => {
+          console.error('Error while submitting check-in:', error);
+          this.message = 'Error recording check-in: ' + (error.response && error.response.data ? error.response.data.message : error.message);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
 
     fetchCheckIns() {
-      axios.get('')
+      // Adjust the URL below to match your Flask app's location and port
+      axios.get('http://localhost:5000/api/ta/check-ins')
         .then(response => {
-          if (response && response.data) {
-            this.checkIns = response.data;
+          if (response.data && response.status === 200) {
+            this.checkIns = response.data.check_ins;
           } else {
-            console.log('Unexpected response structure when fetching check-ins:', response);
+            console.error('Unexpected response structure when fetching check-ins:', response);
           }
         })
         .catch(error => {
@@ -106,10 +113,20 @@ input, button {
   padding: 8px;
   margin-top: 5px;
 }
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 li {
   margin-top: 10px;
   padding: 10px;
   border-radius: 5px;
   background-color: #f0f0f0;
+}
+.message {
+  margin-top: 20px;
+  color: red;
+  font-weight: bold;
 }
 </style>

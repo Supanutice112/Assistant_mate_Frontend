@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="overflow-x-auto">
-      <table class="table w-full">
+      <table class="table w-full ">
         <!-- head -->
         <thead>
           <tr>
@@ -19,7 +19,7 @@
             <td>
               <div class="flex items-center gap-3">
                 <div>
-                  <div class="font-bold">{{ course.name }}</div>
+                  <div class="font-bold">{{ course.course_name }}</div>
                   <div class="text-sm opacity-50">{{ course.id }}</div>
                 </div>
               </div>
@@ -29,12 +29,12 @@
               <br />
               <span 
                 class="badge badge-ghost badge-sm"
-                :class="{'badge-accent': course.international, 'badge-info': !course.international}"
+                :class="{'badge-accent': course.section, 'badge-info': !course.section}"
               >
-                {{ course.international ? 'International' : 'Local' }}
+                section: {{ course.section }}
               </span>
             </td>
-            <td>{{ course.time }}</td>
+            <td>{{ course.course_time }}</td>
             <td>
               <router-link :to="'/attendance/' + course.id">
                 <button class="btn btn-ghost btn-xs">Attendance</button>
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     async getCourses() {
-      const path = 'http://127.0.0.1:5000/courses'; // Ensure this matches the updated Flask route
+      const path = 'http://127.0.0.1:5000/api/courses'; // Ensure this matches the updated Flask route
       try {
         const response = await axios.get(path);
         this.courses = response.data.courses;
