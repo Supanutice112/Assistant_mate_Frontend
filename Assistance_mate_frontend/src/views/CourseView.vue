@@ -61,10 +61,10 @@ export default {
   },
   methods: {
     async getCourses() {
-      const path = 'http://127.0.0.1:5000/api/courses'; // Ensure this matches the updated Flask route
+      const path = 'http://127.0.0.1:5000/api/courses';
       try {
         const response = await axios.get(path);
-        this.courses = response.data.courses;
+        this.courses = response.data.courses; // Now should correctly populate
       } catch (error) {
         console.error('Failed to fetch courses:', error);
         alert('Failed to load courses. Please try again later.');
