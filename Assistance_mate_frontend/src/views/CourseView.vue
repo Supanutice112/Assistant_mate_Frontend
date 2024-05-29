@@ -14,18 +14,18 @@
         </thead>
         <tbody>
           <!-- Dynamic rows based on courses data -->
-          <tr v-for="(course, index) in courses" :key="course.id">
-            <th>{{ index + 1 }}</th>
+          <tr v-for="(course, index) in displayedCourses" :key="course.id">
+            <th>{{ (currentPage - 1) * pageSize + index + 1 }}</th>
             <td>
               <div class="flex items-center gap-3">
                 <div>
                   <div class="font-bold">{{ course.course_name }}</div>
-                  <div class="text-sm opacity-50">{{ course.id }}</div>
+                  <div class="text-sm opacity-50">{{ course.courseid }}</div>
                 </div>
               </div>
             </td>
             <td>
-              {{ course.professor }}
+              {{ course.Teacher_name }}
               <br />
               <span 
                 class="badge badge-ghost badge-sm"
@@ -36,13 +36,17 @@
             </td>
             <td>{{ course.course_time }}</td>
             <td>
-              <router-link :to="'/attendance/' + course.id">
+              <router-link :to="'/attendance/' + course.courseid">
                 <button class="btn btn-ghost btn-xs">Attendance</button>
               </router-link>
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="flex justify-between mt-4">
+      <button class="btn btn-primary" @click="prevPage" :disabled="currentPage === 1">Previous Page</button>
+      <button class="btn btn-primary" @click="nextPage" :disabled="currentPage * pageSize >= courses.length">Next Page</button>
     </div>
   </div>
 </template>
@@ -54,7 +58,16 @@ export default {
   data() {
     return {
       courses: [],
+      currentPage: 1,
+      pageSize: 8, // Change page size to 8
     };
+  },
+  computed: {
+    displayedCourses() {
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.courses.slice(startIndex, endIndex);
+    },
   },
   async created() {
     await this.getCourses();
@@ -68,6 +81,16 @@ export default {
       } catch (error) {
         console.error('Failed to fetch courses:', error);
         alert('Failed to load courses. Please try again later.');
+      }
+    },
+    nextPage() {
+      if (this.currentPage * this.pageSize < this.courses.length) {
+        this.currentPage++;
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
       }
     },
   },
