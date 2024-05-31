@@ -15,53 +15,53 @@ const router = createRouter({
   routes: [
     {
       name: 'login',
-      path: '/login', 
+      path: '/', 
       component: LoginView 
     },
     {
-      path: '/',
+      path: '/tadashboard',
       name: 'tadashboard',
       component: TADashboardView,
       children: [
         {
           name: 'home',
-          path: 'home',  // Relative to '/'. This is now '/home'
+          path: '/home',  // Relative to '/'. This is now '/home'
           component: HomeView
         },
         {
           name: 'course',
-          path: 'course',  // This is now '/course'
+          path: '/course',  // This is now '/course'
           component: CourseView 
         },
         {
           name: 'profile',
-          path: 'profile',  // This is now '/profile'
+          path: '/profile',  // This is now '/profile'
           component: ProfileView 
         },
         {
           name: 'notification',
-          path: 'notification',  // This is now '/notification'
+          path: '/notification',  // This is now '/notification'
           component: NotificationView 
         },
         {
           name: 'calwage',
-          path: 'calwage',  // This is now '/calwage'
+          path: '/calwage',  // This is now '/calwage'
           component: CalwageView 
         },
         {
           name: 'form',
-          path: 'form',  // This is now '/form'
+          path: '/form',  // This is now '/form'
           component: FormView 
         },
         {
           name: 'attendance',
-          path: 'attendance/:id',  // Updated path with parameter `id`
+          path: '/attendance/:id',  // Updated path with parameter `id`
           component: AttendanceView,
           props: true  // Enables route parameter props
         },
         {
           name: 'Teachernotification',
-          path: 'Teachernotification',  // This is now '/Teachernotification'
+          path: '/Teachernotification',  // This is now '/Teachernotification'
           component: TeacherNotificationView
         },
       ]
