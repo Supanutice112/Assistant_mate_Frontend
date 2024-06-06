@@ -1,24 +1,23 @@
 <template>
-  <div class="ta-check-attendance">
-    <div class="current-time">Current Time: {{ currentTime }}</div>
+  <div>
     <h1>TA Check Attendance</h1>
     <form @submit.prevent="submitCheckIn">
-      <button class="btn btn-active btn-secondary" type="submit" :disabled="loading || alreadyCheckedIn">
+      <label for="date">Date:</label>
+      <input type="date" id="date" v-model="checkInData.date" required>
+
+      <label for="startTime">Start Time:</label>
+      <input type="time" id="startTime" v-model="checkInData.startTime" required>
+
+      <label for="endTime">End Time:</label>
+      <input type="time" id="endTime" v-model="checkInData.endTime" required>
+
+      <button type="submit" :disabled="loading">
         <span v-if="loading">Processing...</span>
         <span v-else>Check Attendance</span>
       </button>
     </form>
+
     <p v-if="message" class="message">{{ message }}</p>
-    <h1>Your Attendance</h1>
-    <ul v-if="checkIns.length > 0">
-      <li v-for="(record, index) in checkIns" :key="index">
-        <p><strong>Date:</strong> {{ record.date }}</p>
-        <p><strong>Start Time:</strong> {{ record.startTime }}</p>
-        <p><strong>End Time:</strong> {{ record.endTime }}</p>
-        <p><strong>Status:</strong> {{ record.status }}</p>
-      </li>
-    </ul>
-    <p v-else>No Attendance recorded.</p>
   </div>
 </template>
 
@@ -26,90 +25,58 @@
 import axios from 'axios';
 
 export default {
-  name: 'TACheckAttendanceView',
   data() {
     return {
-      currentTime: new Date().toLocaleTimeString(),
-      checkIns: [],
+      checkInData: {
+        date: '',
+        startTime: '',
+        endTime: ''
+      },
       loading: false,
-      message: '',
-      alreadyCheckedIn: false
+      message: ''
     };
   },
   methods: {
-    updateClock() {
-      this.currentTime = new Date().toLocaleTimeString();
-    },
     submitCheckIn() {
-      const now = new Date();
-      const checkInData = {
-        date: now.toISOString().split('T')[0],
-        startTime: now.toISOString().split('T')[1].slice(0, 8),
-        endTime: new Date(now.getTime() + 30*60000).toISOString().split('T')[1].slice(0, 8)
-      };
-
       this.loading = true;
-      axios.post('http://127.0.0.1:5000/api/ta/check_attendance', checkInData)
+      axios.post('http://localhost:5000/api/checkin', this.checkInData)
         .then(response => {
-          if (response.data && response.status === 201) {
-            this.message = 'Attendance recorded successfully. Waiting for approval.';
-            this.checkIns.push({ ...checkInData, status: 'Pending' });
-            this.alreadyCheckedIn = true;
-          } else if (response.status === 409) {
-            this.message = 'Attendance already recorded today.';
-            this.alreadyCheckedIn = true;
-          } else {
-            this.message = 'Unexpected response from the server. Please try again.';
-          }
+          this.loading = false;
+          this.message = response.data.message;
+          // Optionally, reset the form
+          this.checkInData.date = '';
+          this.checkInData.startTime = '';
+          this.checkInData.endTime = '';
         })
         .catch(error => {
-          console.error('Error while submitting check-in:', error);
-          this.message = 'Error recording check-in: ' + (error.response && error.response.data ? error.response.data.message : error.message);
-        })
-        .finally(() => {
           this.loading = false;
+          this.message = 'Failed to check in attendance.';
+          console.error(error);
         });
     }
-  },
-  mounted() {
-    this.updateClock();
-    this.interval = setInterval(this.updateClock, 1000);
-  },
-  beforeUnmount() {
-    clearInterval(this.interval);
   }
 };
 </script>
 
 <style scoped>
-.current-time {
-  text-align: center;
-  font-size: 24px;
-  padding: 10px;
-  color: #333;
-}
-.ta-check-attendance {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px;
+input, button {
+  padding: 8px;
+  margin-top: 5px;
 }
 button {
-  width: 100%;
-  padding: 8px;
-  margin-top: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.message {
-  margin-top: 20px;
-  color: red;
-  font-weight: bold;
 }
 li {
   margin-top: 10px;
   padding: 10px;
   border-radius: 5px;
   background-color: #f0f0f0;
+}
+.message {
+  margin-top: 20px;
+  color: red;
+  font-weight: bold;
 }
 </style>
