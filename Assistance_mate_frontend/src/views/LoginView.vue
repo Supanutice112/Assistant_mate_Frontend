@@ -27,9 +27,11 @@ export default {
         }, {
           withCredentials: true, // This ensures cookies are sent along with the request
         });
+        const token = response.data.access_token;
+        localStorage.setItem('access_token', token);
 
         if (response.data.message === 'Login successful') {
-          this.$router.push('/tadashboard');
+          this.$router.push('/home');
         } else {
           alert('Login failed');
         }

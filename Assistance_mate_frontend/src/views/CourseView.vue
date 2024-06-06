@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="overflow-x-auto">
-      <table class="table w-full ">
+      <table class="table w-full">
         <!-- head -->
         <thead>
           <tr>
@@ -14,7 +14,7 @@
         </thead>
         <tbody>
           <!-- Dynamic rows based on courses data -->
-          <tr v-for="(course, index) in displayedCourses" :key="course.id">
+          <tr v-for="(course, index) in displayedCourses" :key="course.courseid">
             <th>{{ (currentPage - 1) * pageSize + index + 1 }}</th>
             <td>
               <div class="flex items-center gap-3">
@@ -27,7 +27,7 @@
             <td>
               {{ course.Teacher_name }}
               <br />
-              <span 
+              <span
                 class="badge badge-ghost badge-sm"
                 :class="{'badge-accent': course.section, 'badge-info': !course.section}"
               >
@@ -53,46 +53,105 @@
 
 <script>
 import axios from 'axios';
+
 export default {
-  name: 'CoursePage',
   data() {
     return {
       courses: [],
+      displayedCourses: [],
       currentPage: 1,
-      pageSize: 8, // Change page size to 8
+      pageSize: 10,
     };
   },
-  computed: {
-    displayedCourses() {
-      const startIndex = (this.currentPage - 1) * this.pageSize;
-      const endIndex = startIndex + this.pageSize;
-      return this.courses.slice(startIndex, endIndex);
-    },
-  },
   async created() {
-    await this.getCourses();
+    await this.fetchMyCourses();
   },
   methods: {
-    async getCourses() {
-      const path = 'http://127.0.0.1:5000/api/courses';
+    async fetchMyCourses() {
       try {
-        const response = await axios.get(path);
-        this.courses = response.data.courses; // Now should correctly populate
+        const response = await axios.get('http://127.0.0.1:5000/api/my_courses', {
+          withCredentials: true, // Ensure credentials are sent
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`, // Assuming token is stored in localStorage
+          },
+        });
+        this.courses = response.data.courses;
+        this.displayedCourses = this.paginate(this.courses, this.currentPage, this.pageSize);
       } catch (error) {
-        console.error('Failed to fetch courses:', error);
-        alert('Failed to load courses. Please try again later.');
+        console.error('Error fetching courses:', error);
+        alert('Failed to fetch courses.');
       }
     },
-    nextPage() {
-      if (this.currentPage * this.pageSize < this.courses.length) {
-        this.currentPage++;
-      }
+    paginate(array, page, size) {
+      const start = (page - 1) * size;
+      const end = page * size;
+      return array.slice(start, end);
     },
-    prevPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
-      }
+  },
+  watch: {
+    currentPage() {
+      this.displayedCourses = this.paginate(this.courses, this.currentPage, this.pageSize);
+    },
+    pageSize() {
+      this.displayedCourses = this.paginate(this.courses, this.currentPage, this.pageSize);
     },
   },
 };
 </script>
+
+<style scoped>
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.table th {
+  background-color: #f2f2f2;
+  text-align: left;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.btn-primary:disabled {
+  background-color: #007bff;
+  opacity: 0.5;
+}
+
+.btn-ghost {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.btn-xs {
+  font-size: 0.75rem;
+}
+</style>

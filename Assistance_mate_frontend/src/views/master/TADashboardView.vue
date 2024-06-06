@@ -78,7 +78,7 @@
                         <div class="flex items-center justify-start space-x-4" @click="toggleDrop">
                             <img class="w-10 h-10 rounded-full border-2 border-black" src="https://cdn-icons-png.freepik.com/256/1077/1077114.png?semt=ais_hybrid" alt="">
                             <div class="font-semibold dark:text-black text-left">
-                                <div>Supanut maneeyot</div>
+                                <div>{{ currentUser.username }}</div>
                                 <div class="text-xs text-blue-900 dark:text-blue-500">Admin</div>
                             </div>
                         </div>
@@ -108,26 +108,46 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
       showDropDown: false,
-      showSide: true
+      showSide: true, // Initialize showSide to true
+      currentUser: {
+        username: '',
+        role: ''
+      }
     }
   },
+  created() {
+    this.fetchCurrentUser();
+  },
   methods: {
-    // hide show side bar
+    // hide/show sidebar
     toggleSideBar() {
       this.showSide = !this.showSide;
-
     },
-    // toggle user 
+    // toggle user dropdown
     toggleDrop() {
       this.showDropDown = !this.showDropDown;
-
+    },
+    // fetch current user data from backend
+    async fetchCurrentUser() {
+      try {
+        const response = await axios.get('http://127.0.0.1:5000/api/current_user', {
+          withCredentials: true,
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          },
+        });
+        this.currentUser = response.data;
+      } catch (error) {
+        console.error('Error fetching current user:', error);
+      }
     }
   }
-
 }
 </script>
 <style scoped>
