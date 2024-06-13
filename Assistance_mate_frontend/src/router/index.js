@@ -1,15 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import TADashboardView from '@/views/master/TADashboardView.vue'
-import CourseView from '@/views/CourseView.vue'
-import ProfileView from '@/views/ProfileView.vue'
-import HomeView from '@/views/HomeView.vue'
-import NotificationView from '@/views/NotificationView.vue'
-import CalwageView from '@/views/CalwageView.vue'
-import FormView from '@/views/FormView.vue'
+import CourseView from '@/views/TA/CourseView.vue'
+import ProfileView from '@/views/TA/ProfileView.vue'
+import HomeView from '@/views/TA/HomeView.vue'
+import NotificationView from '@/views/TA/NotificationView.vue'
+import CalwageView from '@/views/TA/CalwageView.vue'
+import FormView from '@/views/TA/FormView.vue'
 import LoginView from '@/views/LoginView.vue'
-import AttendanceView from '@/views/AttendanceView.vue'
-import TeacherNotificationView from '@/views/TeacherNotificationView.vue'
-
+import AttendanceView from '@/views/TA/AttendanceView.vue'
+import TaNotificationView from '@/views/TA/TaNotificationView.vue'
+import TeacherDashboardView from '@/views/master/TeacherDashboardView.vue'
+import TeacherHomeView from '@/views/Teacher/TeacherHomeView.vue'
+import TeacherCourseView from '@/views/Teacher/TeacherCourseView.vue'
+import TeacherNotificationView from '@/views/Teacher/TeacherNotificationView.vue'
+import TeacherEvaluateView from '@/views/Teacher/TeacherEvaluateView.vue'
+import TeacherProfileView from '@/views/Teacher/TeacherProfileView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -24,28 +29,28 @@ const router = createRouter({
       component: TADashboardView,
       children: [
         {
-          name: 'home',
-          path: '/home',  // Relative to '/'. This is now '/home'
+          name: 'tahome',
+          path: '/tahome',  // Relative to '/'. This is now '/home'
           component: HomeView
         },
         {
-          name: 'course',
-          path: '/course',  // This is now '/course'
+          name: 'tacourse',
+          path: '/tacourse',  // This is now '/course'
           component: CourseView 
         },
         {
-          name: 'profile',
-          path: '/profile',  // This is now '/profile'
+          name: 'taprofile',
+          path: '/taprofile',  // This is now '/profile'
           component: ProfileView 
         },
         {
-          name: 'notification',
-          path: '/notification',  // This is now '/notification'
+          name: 'tanotification',
+          path: '/tanotification',  // This is now '/notification'
           component: NotificationView 
         },
         {
-          name: 'calwage',
-          path: '/calwage',  // This is now '/calwage'
+          name: 'tacalwage',
+          path: '/tacalwage',  // This is now '/calwage'
           component: CalwageView 
         },
         {
@@ -60,8 +65,40 @@ const router = createRouter({
           props: true  // Enables route parameter props
         },
         {
-          name: 'Teachernotification',
-          path: '/Teachernotification',  // This is now '/Teachernotification'
+          name: 'Tanotification',
+          path: '/Tanotification',  // This is now '/Teachernotification'
+          component: TaNotificationView
+        },
+      ]
+    },
+    {
+      path: '/teacherdashboard',
+      name: 'teacherdashboard',
+      component: TeacherDashboardView,
+      children: [
+        {
+          name: 'teacherhome',
+          path: '/teacherhome',  // Relative to '/'. This is now '/home'
+          component: TeacherHomeView
+        },
+        {
+          name: 'teachercourse',
+          path: '/teachercourse',  // Relative to '/'. This is now '/home'
+          component: TeacherCourseView
+        },
+        {
+          name: 'teacherprofile',
+          path: '/teacherprofile',  // Relative to '/'. This is now '/home'
+          component: TeacherProfileView
+        },
+        {
+          name: 'teacherevaluate',
+          path: '/teacherevaluate',  // Relative to '/'. This is now '/home'
+          component: TeacherEvaluateView
+        },
+        {
+          name: 'teachernotification',
+          path: '/teachernotification',  // Relative to '/'. This is now '/home'
           component: TeacherNotificationView
         },
       ]
