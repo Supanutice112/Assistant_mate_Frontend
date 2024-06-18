@@ -15,6 +15,7 @@ import TeacherCourseView from '@/views/Teacher/TeacherCourseView.vue'
 import TeacherNotificationView from '@/views/Teacher/TeacherNotificationView.vue'
 import TeacherEvaluateView from '@/views/Teacher/TeacherEvaluateView.vue'
 import TeacherProfileView from '@/views/Teacher/TeacherProfileView.vue'
+import ViewAttendanceView from '@/views/TA/ViewAttendanceView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -68,6 +69,11 @@ const router = createRouter({
           name: 'Tanotification',
           path: '/Tanotification',  // This is now '/Teachernotification'
           component: TaNotificationView
+        },
+        {
+          name: 'taviewattendance',
+          path: '/taviewattendance',  // This is now '/Teachernotification'
+          component: ViewAttendanceView
         },
       ]
     },

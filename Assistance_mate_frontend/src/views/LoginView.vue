@@ -31,7 +31,7 @@ export default {
         localStorage.setItem('access_token', token);
 
         if (response.data.message === 'Login successful') {
-          this.$router.push('/home');
+          this.$router.push('/tahome');
         } else {
           alert('Login failed');
         }

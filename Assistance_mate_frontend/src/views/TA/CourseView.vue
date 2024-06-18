@@ -25,7 +25,7 @@
               </div>
             </td>
             <td>
-              {{ course.Teacher_name }}
+              {}
               <br />
               <span 
                 class="badge badge-ghost badge-sm"
@@ -39,6 +39,7 @@
               <router-link :to="'/attendance/' + course.courseid">
                 <button class="btn btn-ghost btn-xs">Attendance</button>
               </router-link>
+              
             </td>
           </tr>
         </tbody>

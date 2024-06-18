@@ -1,115 +1,112 @@
 <template>
-  <div class="ta-check-attendance">
-    <div class="current-time">Current Time: {{ currentTime }}</div>
-    <h1>TA Check Attendance</h1>
+  <div>
+    <h1>TA Check Attendance for Course ID: {{ courseId }}</h1>
     <form @submit.prevent="submitCheckIn">
-      <button class="btn btn-active btn-secondary" type="submit" :disabled="loading || alreadyCheckedIn">
+      <label for="date">Date:</label>
+      <input type="date" id="date" v-model="checkInData.date" required>
+
+      <label for="startTime">Start Time:</label>
+      <input type="time" id="startTime" v-model="checkInData.startTime" required>
+
+      <label for="endTime">End Time:</label>
+      <input type="time" id="endTime" v-model="checkInData.endTime" required>
+
+      <p v-if="timeError" class="error">Start Time must be before End Time.</p>
+
+      <button type="submit" :disabled="loading">
         <span v-if="loading">Processing...</span>
         <span v-else>Check Attendance</span>
       </button>
     </form>
-    <p v-if="message" class="message">{{ message }}</p>
-    <h1>Your Attendance</h1>
-    <ul v-if="checkIns.length > 0">
-      <li v-for="(record, index) in checkIns" :key="index">
-        <p><strong>Date:</strong> {{ record.date }}</p>
-        <p><strong>Start Time:</strong> {{ record.startTime }}</p>
-        <p><strong>End Time:</strong> {{ record.endTime }}</p>
-        <p><strong>Status:</strong> {{ record.status }}</p>
-      </li>
-    </ul>
-    <p v-else>No Attendance recorded.</p>
+
+
+    <p v-if="message" :class="{'message': true, 'success': success, 'error': !success}">{{ message }}</p>
   </div>
 </template>
-
 <script>
 import axios from 'axios';
 
 export default {
-  name: 'TACheckAttendanceView',
   data() {
     return {
-      currentTime: new Date().toLocaleTimeString(),
-      checkIns: [],
+      checkInData: {
+        course_id: '',
+        date: '',
+        startTime: '',
+        endTime: ''
+      },
       loading: false,
       message: '',
-      alreadyCheckedIn: false
+      success: false,
+      timeError: false
     };
   },
-  methods: {
-    updateClock() {
-      this.currentTime = new Date().toLocaleTimeString();
-    },
-    submitCheckIn() {
-      const now = new Date();
-      const checkInData = {
-        date: now.toISOString().split('T')[0],
-        startTime: now.toISOString().split('T')[1].slice(0, 8),
-        endTime: new Date(now.getTime() + 30*60000).toISOString().split('T')[1].slice(0, 8)
-      };
-
-      this.loading = true;
-      axios.post('http://127.0.0.1:5000/api/ta/check_attendance', checkInData)
-        .then(response => {
-          if (response.data && response.status === 201) {
-            this.message = 'Attendance recorded successfully. Waiting for approval.';
-            this.checkIns.push({ ...checkInData, status: 'Pending' });
-            this.alreadyCheckedIn = true;
-          } else if (response.status === 409) {
-            this.message = 'Attendance already recorded today.';
-            this.alreadyCheckedIn = true;
-          } else {
-            this.message = 'Unexpected response from the server. Please try again.';
-          }
-        })
-        .catch(error => {
-          console.error('Error while submitting check-in:', error);
-          this.message = 'Error recording check-in: ' + (error.response && error.response.data ? error.response.data.message : error.message);
-        })
-        .finally(() => {
-          this.loading = false;
-        });
+  computed: {
+    courseId() {
+      return this.$route.params.id;
     }
   },
-  mounted() {
-    this.updateClock();
-    this.interval = setInterval(this.updateClock, 1000);
+  created() {
+    this.checkInData.course_id = this.courseId;
   },
-  beforeUnmount() {
-    clearInterval(this.interval);
+  methods: {
+    validateTimes() {
+      if (this.checkInData.startTime >= this.checkInData.endTime) {
+        this.timeError = true;
+        return false;
+      } else {
+        this.timeError = false;
+        return true;
+      }
+    },
+    async submitCheckIn() {
+      if (!this.validateTimes()) {
+        this.message = 'Please correct the errors and try again.';
+        this.success = false;
+        return;
+      }
+      this.loading = true;
+      try {
+        const response = await axios.post('http://localhost:5000/api/checkin', {
+          course_id: this.courseId,
+          date: this.checkInData.date,
+          startTime: this.checkInData.startTime,
+          endTime: this.checkInData.endTime
+        });
+        this.message = response.data.message;
+        this.success = true;
+        this.checkInData.date = '';
+        this.checkInData.startTime = '';
+        this.checkInData.endTime = '';
+      } catch (error) {
+        this.message = 'Failed to check in attendance. ' + (error.response ? error.response.data.error : '');
+        this.success = false;
+        console.error(error);
+      } finally {
+        this.loading = false;
+      }
+    }
   }
 };
 </script>
-
 <style scoped>
-.current-time {
-  text-align: center;
-  font-size: 24px;
-  padding: 10px;
-  color: #333;
-}
-.ta-check-attendance {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px;
+input, button {
+  padding: 8px;
+  margin-top: 5px;
 }
 button {
-  width: 100%;
-  padding: 8px;
-  margin-top: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .message {
   margin-top: 20px;
-  color: red;
   font-weight: bold;
 }
-li {
-  margin-top: 10px;
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #f0f0f0;
+.success {
+  color: green;
+}
+.error {
+  color: red;
 }
 </style>
