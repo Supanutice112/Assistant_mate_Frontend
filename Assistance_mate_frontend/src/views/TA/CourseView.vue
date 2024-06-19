@@ -25,7 +25,7 @@
               </div>
             </td>
             <td>
-              {}
+              {{ course.Teacher_name }}
               <br />
               <span 
                 class="badge badge-ghost badge-sm"
