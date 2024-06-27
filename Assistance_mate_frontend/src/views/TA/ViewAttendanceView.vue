@@ -43,7 +43,11 @@ export default {
   methods: {
     async fetchAttendanceRecords() {
       try {
-        const response = await axios.get('http://localhost:5000/api/viewattendance');
+        const response = await axios.get('http://localhost:5000/api/viewattendance', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          }
+        });
         this.attendanceRecords = response.data.attendance.map(record => ({
           ...record,
           date: new Date(record.date).toLocaleDateString(),

@@ -1,10 +1,36 @@
 <template>
   <div>
-    <form @submit.prevent="login">
-      <input v-model="username" type="text" placeholder="Username" />
-      <input v-model="password" type="password" placeholder="Password" />
-      <button type="submit">Login</button>
-    </form>
+    <!-- Student Login -->
+    <div class="login-container">
+      <h3>Student Login</h3>
+      <form @submit.prevent="login">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input v-model="username" type="text" id="username" placeholder="Username" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input v-model="password" type="password" id="password" placeholder="Password" required />
+        </div>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+
+    <!-- Teacher Login -->
+    <div class="login-container">
+      <h3>Teacher Login</h3>
+      <form @submit.prevent="loginTeacher">
+        <div class="form-group">
+          <label for="teacher_username">Username</label>
+          <input v-model="teacher_username" type="text" id="teacher_username" placeholder="Teacher Username" required />
+        </div>
+        <div class="form-group">
+          <label for="teacher_password">Password</label>
+          <input v-model="teacher_password" type="password" id="teacher_password" placeholder="Password" required />
+        </div>
+        <button type="submit">Login</button>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -16,6 +42,8 @@ export default {
     return {
       username: '',
       password: '',
+      teacher_username: '', // Add teacher_username
+      teacher_password: '', // Add teacher_password
     };
   },
   methods: {
@@ -25,7 +53,7 @@ export default {
           username: this.username,
           password: this.password,
         }, {
-          withCredentials: true, // This ensures cookies are sent along with the request
+          withCredentials: true,
         });
         const token = response.data.access_token;
         localStorage.setItem('access_token', token);
@@ -40,10 +68,38 @@ export default {
         alert('An error occurred during login');
       }
     },
+    async loginTeacher() {
+      try {
+        const response = await axios.post('http://127.0.0.1:5000/login_teacher', {
+          Teacher_name: this.teacher_username,
+          password: this.teacher_password,
+        }, {
+          withCredentials: true,
+        });
+
+        const token = response.data.access_token;
+        localStorage.setItem('access_token', token);
+
+        if (response.data.message === 'Login successful') {
+          this.$router.push('/teacherhome');
+        } else {
+          alert('Login failed. Please check your credentials.');
+        }
+      } catch (error) {
+        if (error.response) {
+          alert('An error occurred during login: ' + error.response.data.error);
+        } else if (error.request) {
+          console.error('No response received:', error.request);
+          alert('No response received from the server.');
+        } else {
+          console.error('Error setting up the request:', error.message);
+          alert('Error setting up the request: ' + error.message);
+        }
+      }
+    },
   },
 };
 </script>
-
 
 <style scoped>
 .login-container {

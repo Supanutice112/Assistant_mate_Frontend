@@ -19,10 +19,10 @@
       </button>
     </form>
 
-
     <p v-if="message" :class="{'message': true, 'success': success, 'error': !success}">{{ message }}</p>
   </div>
 </template>
+
 <script>
 import axios from 'axios';
 
@@ -60,35 +60,42 @@ export default {
       }
     },
     async submitCheckIn() {
-      if (!this.validateTimes()) {
-        this.message = 'Please correct the errors and try again.';
-        this.success = false;
-        return;
+  if (!this.validateTimes()) {
+    this.message = 'Please correct the errors and try again.';
+    this.success = false;
+    return;
+  }
+  this.loading = true;
+  try {
+    const response = await axios.post('http://127.0.0.1:5000/api/checkin', {
+      course_id: this.courseId,
+      date: this.checkInData.date,
+      startTime: this.checkInData.startTime,
+      endTime: this.checkInData.endTime
+    }, {
+      withCredentials: true, // Ensure credentials are sent
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
       }
-      this.loading = true;
-      try {
-        const response = await axios.post('http://localhost:5000/api/checkin', {
-          course_id: this.courseId,
-          date: this.checkInData.date,
-          startTime: this.checkInData.startTime,
-          endTime: this.checkInData.endTime
-        });
-        this.message = response.data.message;
-        this.success = true;
-        this.checkInData.date = '';
-        this.checkInData.startTime = '';
-        this.checkInData.endTime = '';
-      } catch (error) {
-        this.message = 'Failed to check in attendance. ' + (error.response ? error.response.data.error : '');
-        this.success = false;
-        console.error(error);
-      } finally {
-        this.loading = false;
-      }
+    });
+    this.message = response.data.message;
+    this.success = true;
+    this.checkInData.date = '';
+    this.checkInData.startTime = '';
+    this.checkInData.endTime = '';
+  } catch (error) {
+    this.message = 'Failed to check in attendance. ' + (error.response ? error.response.data.error : '');
+    this.success = false;
+    console.error(error);
+  } finally {
+    this.loading = false;
+  }
     }
   }
 };
 </script>
+
 <style scoped>
 input, button {
   padding: 8px;
