@@ -16,6 +16,7 @@ import TeacherNotificationView from '@/views/Teacher/TeacherNotificationView.vue
 import TeacherEvaluateView from '@/views/Teacher/TeacherEvaluateView.vue'
 import TeacherProfileView from '@/views/Teacher/TeacherProfileView.vue'
 import ViewAttendanceView from '@/views/TA/ViewAttendanceView.vue'
+import TeachercancelationView from '@/views/Teacher/TeachercancelationView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -101,6 +102,11 @@ const router = createRouter({
           name: 'teacherevaluate',
           path: '/teacherevaluate',  // Relative to '/'. This is now '/home'
           component: TeacherEvaluateView
+        },
+        {
+          path: '/cancel/:courseId',
+          name: 'TeachercancelationView',
+          component: TeachercancelationView,
         },
         {
           name: 'teachernotification',

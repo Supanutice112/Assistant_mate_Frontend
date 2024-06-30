@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="overflow-x-auto">
-      <table class="table w-full ">
+      <table class="table w-full">
         <!-- head -->
         <thead>
           <tr>
@@ -14,7 +14,7 @@
         </thead>
         <tbody>
           <!-- Dynamic rows based on courses data -->
-          <tr v-for="(course, index) in displayedCourses" :key="course.id">
+          <tr v-for="(course, index) in displayedCourses" :key="course.course_id">
             <th>{{ (currentPage - 1) * pageSize + index + 1 }}</th>
             <td>
               <div class="flex items-center gap-3">
@@ -36,8 +36,8 @@
             </td>
             <td>{{ course.course_time }}</td>
             <td>
-              <router-link :to="'/attendance/' + course.courseid">
-                <button class="btn btn-ghost btn-xs">Attendance</button>
+              <router-link :to="'/cancel/' + course.courseid">
+                <button class="btn btn-ghost btn-xs bg-red-400">cancel</button>
               </router-link>
             </td>
           </tr>
@@ -53,6 +53,7 @@
 
 <script>
 import axios from 'axios';
+
 export default {
   name: 'CoursePage',
   data() {
@@ -74,9 +75,15 @@ export default {
   },
   methods: {
     async getCourses() {
-      const path = 'http://127.0.0.1:5000/api/courses';
+      const path = 'http://127.0.0.1:5000/api/teacher_courses';
+      const token = localStorage.getItem('access_token'); // Retrieve the token from localStorage
+
       try {
-        const response = await axios.get(path);
+        const response = await axios.get(path, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
         this.courses = response.data.courses; // Now should correctly populate
       } catch (error) {
         console.error('Failed to fetch courses:', error);
