@@ -72,19 +72,18 @@
                       <div class="flex items-center justify-start space-x-4" @click="toggleDrop">
                           <img class="w-10 h-10 rounded-full border-2 border-black" src="https://cdn-icons-png.freepik.com/256/1077/1077114.png?semt=ais_hybrid" alt="">
                           <div class="font-semibold dark:text-black text-left">
-                              <div>{{ currentUser.username }}</div>
-                              <div class="text-xs text-blue-900 dark:text-blue-500">Admin</div>
+                              <div>{{ currentUser.Teacher_name }}</div>
+                              <div class="text-xs text-blue-900 dark:text-blue-500">Teacher</div>
                           </div>
                       </div>
                        <!-- Drop down -->
                        <div v-show="showDropDown" class="absolute right-[10px] z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                           <div class="py-1 text   -left" role="none">
                               <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-                              <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Account settings</a>
 
-                              <form method="POST" action="#" role="none">
+                              <router-link to ="/" method="POST" action="#" role="none">
                                   <button type="submit" class="text-gray-700 block w-full px-4 py-2 text-left text-sm" role="menuitem" tabindex="-1" id="menu-item-3">Sign out</button>
-                              </form>
+                              </router-link>
                           </div>
                        </div>
                    </div>
@@ -130,7 +129,7 @@ methods: {
   // fetch current user data from backend
   async fetchCurrentUser() {
     try {
-      const response = await axios.get('http://127.0.0.1:5000/api/current_user', {
+      const response = await axios.get('http://127.0.0.1:5000/api/current_teacher', {
         withCredentials: true,
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
