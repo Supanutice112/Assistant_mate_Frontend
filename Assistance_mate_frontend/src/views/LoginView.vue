@@ -1,38 +1,46 @@
 <template>
-  <div>
-    <!-- Student Login -->
-    <div class="login-container">
-      <h3>Student Login</h3>
-      <form @submit.prevent="login">
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input v-model="username" type="text" id="username" placeholder="Username" required />
+  <div class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 p-6">
+    <!-- Welcome Header -->
+    <header class="mb-8 text-center">
+      <h1 class="text-3xl font-bold text-green-700">Welcome to Assistant Mate</h1>
+      <p class="text-gray-600">Please login to continue</p>
+    </header>
+
+    <!-- TA Login -->
+    <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-md mb-6 text-center">
+      <h3 class="text-2xl font-semibold text-gray-700 mb-4">Teaching Assistant Login</h3>
+      <form @submit.prevent="login" class="space-y-4">
+        <div>
+          <label for="username" class="block text-left text-sm font-medium text-gray-600 mb-1">Username</label>
+          <input v-model="username" type="text" id="username" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Username" required />
         </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input v-model="password" type="password" id="password" placeholder="Password" required />
+        <div>
+          <label for="password" class="block text-left text-sm font-medium text-gray-600 mb-1">Password</label>
+          <input v-model="password" type="password" id="password" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Password" required />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">Login</button>
       </form>
     </div>
 
     <!-- Teacher Login -->
-    <div class="login-container">
-      <h3>Teacher Login</h3>
-      <form @submit.prevent="loginTeacher">
-        <div class="form-group">
-          <label for="teacher_username">Username</label>
-          <input v-model="teacher_username" type="text" id="teacher_username" placeholder="Teacher Username" required />
+    <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-md text-center">
+      <h3 class="text-2xl font-semibold text-gray-700 mb-4">Teacher Login</h3>
+      <form @submit.prevent="loginTeacher" class="space-y-4">
+        <div>
+          <label for="teacher_username" class="block text-left text-sm font-medium text-gray-600 mb-1">Username</label>
+          <input v-model="teacher_username" type="text" id="teacher_username" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Teacher Username" required />
         </div>
-        <div class="form-group">
-          <label for="teacher_password">Password</label>
-          <input v-model="teacher_password" type="password" id="teacher_password" placeholder="Password" required />
+        <div>
+          <label for="teacher_password" class="block text-left text-sm font-medium text-gray-600 mb-1">Password</label>
+          <input v-model="teacher_password" type="password" id="teacher_password" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Password" required />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">Login</button>
       </form>
     </div>
   </div>
 </template>
+
+
 
 <script>
 import axios from 'axios';
