@@ -10,7 +10,7 @@
           <th class="border border-gray-300 p-2">Start Time</th>
           <th class="border border-gray-300 p-2">End Time</th>
           <th class="border border-gray-300 p-2">Hours Worked</th>
-          <th class="border border-gray-300 p-2">Minutes Worked</th>
+          <th class="border border-gray-300 p-2">Wage</th>
         </tr>
       </thead>
       <tbody>
@@ -21,7 +21,7 @@
           <td class="border border-gray-300 p-2">{{ record.start_time }}</td>
           <td class="border border-gray-300 p-2">{{ record.end_time }}</td>
           <td class="border border-gray-300 p-2">{{ record.hours_worked }}</td>
-          <td class="border border-gray-300 p-2">{{ record.minutes_worked }}</td>
+          <td class="border border-gray-300 p-2">{{ record.wage }}</td>
         </tr>
       </tbody>
     </table>
@@ -47,7 +47,30 @@ export default {
           }
         });
         const data = await response.json();
-        this.attendance = data.attendance;
+        this.attendance = data.attendance.map(record => {
+          // Convert minutes to hours and minutes format
+          const minutesWorked = record.minutes_worked;
+          const hours = Math.floor(minutesWorked / 60);
+          const minutes = minutesWorked % 60;
+          const hoursWorked = `${hours}h ${minutes}m`;
+
+          // Calculate wage based on course_type
+          const wageRates = {
+            'stu_thai': 90,
+            'stu_inter': 120,
+            'grad_thai': 200,
+            'grad_inter': 300,
+            'lecturer': 450
+          };
+          const ratePerHour = wageRates[record.course_type] || 0;
+          const wage = ratePerHour * (minutesWorked / 60);
+
+          return {
+            ...record,
+            hours_worked: hoursWorked,
+            wage: wage.toFixed(2) // Format wage to 2 decimal places
+          };
+        });
       } catch (error) {
         console.error('Failed to fetch attendance:', error);
       }
