@@ -1,88 +1,61 @@
 <template>
-    <div class="attendance-view">
-      <h1>Attendance Dashboard</h1>
-      <div v-if="loading">
-        Loading...
-      </div>
-      <div v-else>
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Check-in Time</th>
-              <th>Name</th>
-              <th>Check-out Time</th>
-              <th>Hours Worked</th>
-              <th>Course</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="record in attendanceRecords" :key="record.id">
-              <td>{{ record.date }}</td>
-              <td>{{ record.checkIn }}</td>
-              <td>{{ record.name }}</td>
-              <td>{{ record.checkOut }}</td>
-              <td>{{ calculateHours(record.checkIn, record.checkOut) }}</td>
-              <td>{{ record.course }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </template>
-  
-  <script>
-  import axios from 'axios';
-  
-  export default {
-    data() {
-      return {
-        loading: true,
-        attendanceRecords: []
-      };
-    },
-    mounted() {
-      this.fetchAttendance();
-    },
-    methods: {
-      fetchAttendance() {
-        axios.get('/api/attendance')
-          .then(response => {
-            this.attendanceRecords = response.data;
-            this.loading = false;
-          })
-          .catch(error => {
-            console.error('There was an error fetching the attendance data:', error);
-            this.loading = false;
-          });
-      },
-      editRecord(id) {
-        // Navigate to edit page or handle inline edit
-        console.log('Edit record', id);
-      },
-      calculateHours(checkIn, checkOut) {
-        // Placeholder for time calculation logic
-        const inTime = new Date('1970/01/01 ' + checkIn);
-        const outTime = new Date('1970/01/01 ' + checkOut);
-        const diff = (outTime - inTime) / (1000 * 60 * 60);
-        return diff.toFixed(2); // Returns the duration in hours with two decimal places
+  <div class="p-4">
+    <h2 class="text-xl font-bold mb-4">Attendance Records</h2>
+    <table class="table-auto w-full border-collapse border border-gray-300">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="border border-gray-300 p-2">Course ID</th>
+          <th class="border border-gray-300 p-2">Date</th>
+          <th class="border border-gray-300 p-2">TA Name</th>
+          <th class="border border-gray-300 p-2">Start Time</th>
+          <th class="border border-gray-300 p-2">End Time</th>
+          <th class="border border-gray-300 p-2">Hours Worked</th>
+          <th class="border border-gray-300 p-2">Minutes Worked</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(record, index) in attendance" :key="index" class="hover:bg-gray-100">
+          <td class="border border-gray-300 p-2">{{ record.course_id }}</td>
+          <td class="border border-gray-300 p-2">{{ record.date }}</td>
+          <td class="border border-gray-300 p-2">{{ record.ta_name }}</td>
+          <td class="border border-gray-300 p-2">{{ record.start_time }}</td>
+          <td class="border border-gray-300 p-2">{{ record.end_time }}</td>
+          <td class="border border-gray-300 p-2">{{ record.hours_worked }}</td>
+          <td class="border border-gray-300 p-2">{{ record.minutes_worked }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      attendance: []
+    };
+  },
+  created() {
+    this.fetchAttendance();
+  },
+  methods: {
+    async fetchAttendance() {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/api/attendance_summary', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          }
+        });
+        const data = await response.json();
+        this.attendance = data.attendance;
+      } catch (error) {
+        console.error('Failed to fetch attendance:', error);
       }
     }
-  };
-  </script>
-  
-  <style scoped>
-  .attendance-view {
-    padding: 20px;
-    background-color: #f5f5f5;
   }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  th, td {
-    padding: 10px;
-    border: 1px solid #ccc;
-  }
-  </style>
-  
+};
+</script>
+
+<style scoped>
+/* Add your custom styles here */
+</style>
