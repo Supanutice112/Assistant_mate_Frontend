@@ -25,8 +25,17 @@
     <!-- Evaluation Form -->
     <div v-if="selectedCourse && selectedTA" class="mb-4">
       <form @submit.prevent="submitEvaluation">
-        <label for="score" class="block text-lg font-medium">Score</label>
-        <input type="number" v-model="score" min="0" max="10" required class="mt-2 p-2 border rounded w-full" />
+        <!-- Question 1 -->
+        <label for="question1" class="block text-lg font-medium">Question 1</label>
+        <input type="number" v-model="question1" min="1" max="5" required class="mt-2 p-2 border rounded w-full" />
+
+        <!-- Question 2 -->
+        <label for="question2" class="block text-lg font-medium mt-4">Question 2</label>
+        <input type="number" v-model="question2" min="1" max="5" required class="mt-2 p-2 border rounded w-full" />
+
+        <!-- Question 3 -->
+        <label for="question3" class="block text-lg font-medium mt-4">Question 3</label>
+        <input type="number" v-model="question3" min="1" max="5" required class="mt-2 p-2 border rounded w-full" />
 
         <label for="comment" class="block text-lg font-medium mt-4">Comment</label>
         <textarea v-model="comment" required class="mt-2 p-2 border rounded w-full" rows="4"></textarea>
@@ -39,6 +48,7 @@
   </div>
 </template>
 
+
 <script>
 export default {
   data() {
@@ -47,9 +57,23 @@ export default {
       tas: [],
       selectedCourse: null,
       selectedTA: null,
-      score: null,
+      question1: null,
+      question2: null,
+      question3: null,
       comment: '',
     };
+  },
+  computed: {
+    averageScore() {
+      // Calculate the average score from the three questions
+      const scores = [this.question1, this.question2, this.question3];
+      const validScores = scores.filter(score => score >= 1 && score <= 5);
+      if (validScores.length === 3) {
+        const total = validScores.reduce((sum, score) => sum + score, 0);
+        return (total / validScores.length).toFixed(2);
+      }
+      return null;
+    }
   },
   methods: {
     fetchCourses() {
@@ -83,7 +107,7 @@ export default {
         },
         body: JSON.stringify({
           ta_id: this.selectedTA,
-          score: this.score,
+          score: this.averageScore,
           comment: this.comment,
           course_id: this.selectedCourse,
         }),
@@ -95,7 +119,9 @@ export default {
             // Reset form
             this.selectedCourse = null;
             this.selectedTA = null;
-            this.score = null;
+            this.question1 = null;
+            this.question2 = null;
+            this.question3 = null;
             this.comment = '';
             this.tas = [];
           } else {
@@ -109,6 +135,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .container {

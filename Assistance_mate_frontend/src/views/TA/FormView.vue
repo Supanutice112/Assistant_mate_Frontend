@@ -1,47 +1,43 @@
 <template>
   <div class="p-4">
-    <table class="table-auto w-full border-collapse border border-gray-300">
-      <thead>
-        <tr class="bg-gray-200">
-          <th class="border border-gray-300 p-2">Course ID</th>
-          <th class="border border-gray-300 p-2">Date</th>
-          <th class="border border-gray-300 p-2">TA Name</th>
-          <th class="border border-gray-300 p-2">Start Time</th>
-          <th class="border border-gray-300 p-2">End Time</th>
-          <th class="border border-gray-300 p-2">Hours Worked</th>
-          <th class="border border-gray-300 p-2">Wage</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(record, index) in attendance" :key="index" class="hover:bg-gray-100">
-          <td class="border border-gray-300 p-2">{{ record.course_id }}</td>
-          <td class="border border-gray-300 p-2">{{ record.date }}</td>
-          <td class="border border-gray-300 p-2">{{ record.ta_name }}</td>
-          <td class="border border-gray-300 p-2">{{ record.start_time }}</td>
-          <td class="border border-gray-300 p-2">{{ record.end_time }}</td>
-          <td class="border border-gray-300 p-2">{{ record.hours_worked }}</td>
-          <td class="border border-gray-300 p-2">{{ record.wage }}</td>
-          <td class="border border-gray-300 p-2">{{ record.calwage }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <router-link to="/underformview" class="button">Generate disburstment form for Undergraduate</router-link>
-    <router-link to="/graformview" class="button">Generate disburstment form for Graduate</router-link>
+    <div v-for="(courseSummary, courseId) in groupedSummary" :key="courseId">
+      <h2 class="text-lg font-bold mb-2">Course ID: {{ courseId }}</h2>
+      <table class="table-auto w-full border-collapse border border-gray-300 mb-4">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="border border-gray-300 p-2">TA Name</th>
+            <th class="border border-gray-300 p-2">Total Hours Worked</th>
+            <th class="border border-gray-300 p-2">Total Attendance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(record, index) in courseSummary" :key="index" class="hover:bg-gray-100">
+            <td class="border border-gray-300 p-2">{{ record.ta_name }}</td>
+            <td class="border border-gray-300 p-2">{{ record.total_hours_worked }}</td>
+            <td class="border border-gray-300 p-2">{{ record.attendance_count }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-4 footer">
+      <router-link to="/underformview" class="button">Generate disbursement form for Undergraduate</router-link>
+    </div>
   </div>
 </template>
+
 
 <script>
 export default {
   data() {
     return {
-      attendance: []
+      groupedSummary: {}
     };
   },
   created() {
-    this.fetchAttendance();
+    this.fetchAttendanceSummary();
   },
   methods: {
-    async fetchAttendance() {
+    async fetchAttendanceSummary() {
       try {
         const response = await fetch('http://127.0.0.1:5000/api/attendance_summary', {
           headers: {
@@ -49,41 +45,70 @@ export default {
           }
         });
         const data = await response.json();
-        this.attendance = data.attendance.map(record => {
-          // Convert minutes to hours and minutes format
+
+        // Group by course_id
+        const grouped = data.attendance.reduce((acc, record) => {
+          const courseId = record.course_id;
+          
+          if (!acc[courseId]) {
+            acc[courseId] = [];
+          }
+
+          if (!acc[courseId].find(r => r.ta_name === record.ta_name)) {
+            acc[courseId].push({
+              ta_name: record.ta_name,
+              total_hours_worked: 0,
+              attendance_count: 0
+            });
+          }
+
+          const taSummary = acc[courseId].find(r => r.ta_name === record.ta_name);
+
           const minutesWorked = record.minutes_worked;
-          const hours = Math.floor(minutesWorked / 60);
-          const minutes = minutesWorked % 60;
-          const hoursWorked = `${hours}h ${minutes}m`;
+          const hoursWorked = minutesWorked / 60;
 
-          // Calculate wage based on course_type
-          const wageRates = {
-            'stu_thai': 90,
-            'stu_inter': 120,
-            'grad_thai': 200,
-            'grad_inter': 300,
-            'lecturer': 450
-          };
-          const ratePerHour = wageRates[record.course_type] || 0;
-          const wage = ratePerHour;
-          const calwage = ratePerHour * (minutesWorked / 60);
+          taSummary.total_hours_worked += hoursWorked;
+          taSummary.attendance_count += 1;
 
-          return {
+          return acc;
+        }, {});
+
+        // Format data
+        this.groupedSummary = Object.entries(grouped).reduce((acc, [courseId, records]) => {
+          acc[courseId] = records.map(record => ({
             ...record,
-            hours_worked: hoursWorked,
-            calwage: calwage.toFixed(2), // Format wage to 2 decimal places
-            wage: wage.toFixed(2) // Format wage to 2 decimal places
-          };
-        });
+            total_hours_worked: record.total_hours_worked.toFixed(2),
+            attendance_count: record.attendance_count
+          }));
+          return acc;
+        }, {});
+
       } catch (error) {
-        console.error('Failed to fetch attendance:', error);
+        console.error('Failed to fetch attendance summary:', error);
       }
     }
   }
 };
 </script>
 
+
 <style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+}
+
+.footer {
+  padding: 1rem;
+  text-align: center;
+  background-color: #ffffff; /* Optional: Add background color if desired */
+}
+
 .button {
   display: inline-block;
   padding: 0.75rem 1.25rem;
@@ -96,6 +121,7 @@ export default {
   position: relative;
   overflow: hidden;
   z-index: 1;
+  margin: 0.5rem;
 }
 
 .button:after {
@@ -105,7 +131,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #007bff; /* Set your button color here */
+  background-color: #27bb79; /* Set your button color here */
   border-radius: 10rem;
   z-index: -2;
 }
@@ -117,7 +143,7 @@ export default {
   left: 0;
   width: 0%;
   height: 100%;
-  background-color: #0056b3; /* Darker color for hover effect */
+  background-color: #35a704; /* Darker color for hover effect */
   transition: all 0.3s;
   border-radius: 10rem;
   z-index: -1;
