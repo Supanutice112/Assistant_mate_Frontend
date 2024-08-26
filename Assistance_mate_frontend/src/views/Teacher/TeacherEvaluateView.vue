@@ -2,52 +2,82 @@
   <div class="container mx-auto p-4">
     <h2 class="text-2xl font-bold mb-4">Course Evaluation</h2>
     
-    <!-- Course Selection -->
-    <div class="mb-4">
-      <label for="course" class="block text-lg font-medium">Select Course</label>
-      <select v-model="selectedCourse" @change="fetchTAs" class="mt-2 p-2 border rounded w-full">
-        <option v-for="course in courses" :key="course.courseid" :value="course.courseid">
-          {{ course.course_name }}
-        </option>
-      </select>
-    </div>
-
-    <!-- TA Selection -->
-    <div v-if="selectedCourse" class="mb-4">
-      <label for="ta" class="block text-lg font-medium">Select TA</label>
-      <select v-model="selectedTA" class="mt-2 p-2 border rounded w-full">
-        <option v-for="ta in tas" :key="ta.ta_id" :value="ta.ta_id">
-          {{ ta.ta_name }}
-        </option>
-      </select>
-    </div>
-
-    <!-- Evaluation Form -->
-    <div v-if="selectedCourse && selectedTA" class="mb-4">
-      <form @submit.prevent="submitEvaluation">
-        <!-- Question 1 -->
-        <label for="question1" class="block text-lg font-medium">Question 1</label>
-        <input type="number" v-model="question1" min="1" max="5" required class="mt-2 p-2 border rounded w-full" />
-
-        <!-- Question 2 -->
-        <label for="question2" class="block text-lg font-medium mt-4">Question 2</label>
-        <input type="number" v-model="question2" min="1" max="5" required class="mt-2 p-2 border rounded w-full" />
-
-        <!-- Question 3 -->
-        <label for="question3" class="block text-lg font-medium mt-4">Question 3</label>
-        <input type="number" v-model="question3" min="1" max="5" required class="mt-2 p-2 border rounded w-full" />
-
-        <label for="comment" class="block text-lg font-medium mt-4">Comment</label>
-        <textarea v-model="comment" required class="mt-2 p-2 border rounded w-full" rows="4"></textarea>
-
-        <button type="submit" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-          Submit
-        </button>
-      </form>
-    </div>
+    <!-- Evaluation Form in a Table -->
+    <form @submit.prevent="submitEvaluation">
+      <table class="w-full bg-white border rounded shadow-md">
+        <tbody>
+          <!-- Course Selection -->
+          <tr>
+            <td class="p-3 border-t border-gray-200 w-1/3"><label for="course" class="font-medium">Select Course</label></td>
+            <td class="p-3 border-t border-gray-200">
+              <select v-model="selectedCourse" @change="fetchTAs" class="mt-2 p-2 border rounded w-full" required>
+                <option disabled value="">Please select a course</option>
+                <option v-for="course in courses" :key="course.courseid" :value="course.courseid">
+                  {{ course.course_name }}
+                </option>
+              </select>
+            </td>
+          </tr>
+          
+          <!-- TA Selection -->
+          <tr v-if="selectedCourse">
+            <td class="p-3 border-t border-gray-200"><label for="ta" class="font-medium">Select TA</label></td>
+            <td class="p-3 border-t border-gray-200">
+              <select v-model="selectedTA" class="mt-2 p-2 border rounded w-full" required>
+                <option disabled value="">Please select a TA</option>
+                <option v-for="ta in tas" :key="ta.ta_id" :value="ta.ta_id">
+                  {{ ta.ta_name }}
+                </option>
+              </select>
+            </td>
+          </tr>
+          
+          <!-- Question 1 -->
+          <tr v-if="selectedCourse && selectedTA">
+            <td class="p-3 border-t border-gray-200"><label for="question1" class="font-medium">Responsiveness to Questions?</label></td>
+            <td class="p-3 border-t border-gray-200">
+              <input type="number" v-model="question1" min="1" max="5" required class="p-2 border rounded w-full" />
+            </td>
+          </tr>
+          
+          <!-- Question 2 -->
+          <tr v-if="selectedCourse && selectedTA">
+            <td class="p-3 border-t border-gray-200"><label for="question2" class="font-medium">Clarity of Explanation?</label></td>
+            <td class="p-3 border-t border-gray-200">
+              <input type="number" v-model="question2" min="1" max="5" required class="p-2 border rounded w-full" />
+            </td>
+          </tr>
+          
+          <!-- Question 3 -->
+          <tr v-if="selectedCourse && selectedTA">
+            <td class="p-3 border-t border-gray-200"><label for="question3" class="font-medium">How the TA attends classes on time?</label></td>
+            <td class="p-3 border-t border-gray-200">
+              <input type="number" v-model="question3" min="1" max="5" required class="p-2 border rounded w-full" />
+            </td>
+          </tr>
+          
+          <!-- Comment -->
+          <tr v-if="selectedCourse && selectedTA">
+            <td class="p-3 border-t border-gray-200"><label for="comment" class="font-medium">Comment</label></td>
+            <td class="p-3 border-t border-gray-200">
+              <textarea v-model="comment" required class="p-2 border rounded w-full" rows="4"></textarea>
+            </td>
+          </tr>
+          
+          <!-- Submit Button -->
+          <tr v-if="selectedCourse && selectedTA">
+            <td class="p-3 border-t border-gray-200"></td>
+            <td class="p-3 border-t border-gray-200 text-right">
+              <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+                Submit
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
   </div>
 </template>
-
 
 <script>
 export default {
@@ -65,7 +95,6 @@ export default {
   },
   computed: {
     averageScore() {
-      // Calculate the average score from the three questions
       const scores = [this.question1, this.question2, this.question3];
       const validScores = scores.filter(score => score >= 1 && score <= 5);
       if (validScores.length === 3) {
@@ -116,7 +145,6 @@ export default {
         .then((data) => {
           if (data.status === "success") {
             alert("Evaluation submitted successfully!");
-            // Reset form
             this.selectedCourse = null;
             this.selectedTA = null;
             this.question1 = null;
@@ -136,10 +164,35 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .container {
-  max-width: 600px;
+  max-width: 1000px;
   margin: 0 auto;
+  text-align: left;
+}
+
+table {
+  width: 100%;
+  padding: auto;
+}
+
+thead th {
+  background-color: #f3f4f6;
+}
+
+td, th {
+  padding: 14px;
+}
+
+textarea {
+  resize: none;
+}
+
+button {
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #2563eb;
 }
 </style>

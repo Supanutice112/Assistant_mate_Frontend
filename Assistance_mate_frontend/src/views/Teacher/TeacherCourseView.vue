@@ -1,43 +1,48 @@
 <template>
-  <div>
-    <div class="overflow-x-auto">
-      <table class="table w-full">
+  <div class="p-4">
+    <div class="overflow-x-auto rounded-lg shadow-md">
+      <table class="table-auto w-full bg-white">
         <!-- head -->
-        <thead>
+        <thead class="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
           <tr>
-            <th>#</th>
-            <th>Course</th>
-            <th>Professor</th>
-            <th>Time</th>
-            <th>Action</th>
+            <th class="py-3 px-6 text-left">#</th>
+            <th class="py-3 px-6 text-left">Course</th>
+            <th class="py-3 px-6 text-left">Professor</th>
+            <th class="py-3 px-6 text-left">Time</th>
+            <th class="py-3 px-6 text-left">Action</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="text-gray-600 text-sm font-light">
           <!-- Dynamic rows based on courses data -->
-          <tr v-for="(course, index) in displayedCourses" :key="course.course_id">
-            <th>{{ (currentPage - 1) * pageSize + index + 1 }}</th>
-            <td>
+          <tr v-for="(course, index) in displayedCourses" :key="course.course_id" class="border-b border-gray-200 hover:bg-gray-100">
+            <td class="py-3 px-6 text-left whitespace-nowrap">
+              <div class="flex items-center">
+                <span>{{ (currentPage - 1) * pageSize + index + 1 }}</span>
+              </div>
+            </td>
+            <td class="py-3 px-6 text-left">
               <div class="flex items-center gap-3">
                 <div>
-                  <div class="font-bold">{{ course.course_name }}</div>
-                  <div class="text-sm opacity-50">{{ course.courseid }}</div>
+                  <div class="font-bold text-gray-900">{{ course.course_name }}</div>
+                  <div class="text-sm text-gray-500">{{ course.courseid }}</div>
                 </div>
               </div>
             </td>
-            <td>
+            <td class="py-3 px-6 text-left">
               {{ course.Teacher_name }}
               <br />
               <span 
-                class="badge badge-ghost badge-sm"
-                :class="{'badge-accent': course.section, 'badge-info': !course.section}"
+                class="text-xs text-gray-500 bg-gray-200 rounded-full px-2 py-1"
               >
                 section: {{ course.section }}
               </span>
             </td>
-            <td>{{ course.course_time }}</td>
-            <td>
+            <td class="py-3 px-6 text-left">
+              {{ course.course_time }}
+            </td>
+            <td class="py-3 px-6 text-left">
               <router-link :to="'/cancel/' + course.courseid">
-                <button class="btn btn-ghost btn-xs bg-red-400">cancel</button>
+                <button class="text-white bg-red-500 hover:bg-red-600 rounded-full px-4 py-2 text-xs focus:outline-none">cancel</button>
               </router-link>
             </td>
           </tr>
@@ -45,8 +50,18 @@
       </table>
     </div>
     <div class="flex justify-between mt-4">
-      <button class="btn btn-primary" @click="prevPage" :disabled="currentPage === 1">Previous Page</button>
-      <button class="btn btn-primary" @click="nextPage" :disabled="currentPage * pageSize >= courses.length">Next Page</button>
+      <button 
+        class="bg-gray-200 text-gray-600 py-2 px-4 rounded-lg focus:outline-none"
+        @click="prevPage" 
+        :disabled="currentPage === 1">
+        Previous Page
+      </button>
+      <button 
+        class="bg-gray-200 text-gray-600 py-2 px-4 rounded-lg focus:outline-none"
+        @click="nextPage" 
+        :disabled="currentPage * pageSize >= courses.length">
+        Next Page
+      </button>
     </div>
   </div>
 </template>
@@ -103,3 +118,28 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+/* Styling for the table */
+.table-auto {
+  border-collapse: separate;
+  border-spacing: 0 15px;
+}
+
+.table-auto thead tr {
+  background-color: #f8f9fa;
+}
+
+.table-auto tbody tr {
+  transition: background-color 0.2s;
+}
+
+.table-auto tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+</style>

@@ -19,6 +19,8 @@ import ViewAttendanceView from '@/views/TA/ViewAttendanceView.vue'
 import TeachercancelationView from '@/views/Teacher/TeachercancelationView.vue'
 import UnderformView from '@/views/TA/UnderformView.vue'
 import GraformView from '@/views/TA/GraformView.vue'
+import TeacherLoginView from '@/views/TeacherLoginView.vue'
+import TaLoginView from '@/views/TaLoginView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -26,6 +28,16 @@ const router = createRouter({
       name: 'login',
       path: '/', 
       component: LoginView 
+    },
+    {
+      name: 'Teacherlogin',
+      path: '/TeacherLogin', 
+      component: TeacherLoginView 
+    },
+    {
+      name: 'TaLogin',
+      path: '/TaLogin', 
+      component: TaLoginView 
     },
     {
       name: 'underform',

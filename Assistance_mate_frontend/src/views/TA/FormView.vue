@@ -1,7 +1,7 @@
 <template>
   <div class="p-4">
     <div v-for="(courseSummary, courseId) in groupedSummary" :key="courseId">
-      <h2 class="text-lg font-bold mb-2">Course ID: {{ courseId }}</h2>
+      <h2 class="text-lg font-bold mb-2 text-left">Course ID: {{ courseId }}</h2>
       <table class="table-auto w-full border-collapse border border-gray-300 mb-4">
         <thead>
           <tr class="bg-gray-200">

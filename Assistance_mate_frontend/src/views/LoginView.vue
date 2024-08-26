@@ -3,111 +3,116 @@
     <!-- Welcome Header -->
     <header class="mb-8 text-center">
       <h1 class="text-3xl font-bold text-green-700">Welcome to Assistant Mate</h1>
-      <p class="text-gray-600">Please login to continue</p>
+      <p class="text-gray-600">Please Select Role to continue</p>
     </header>
   <div class = "animate__animated animate__fadeInLeft">
-    <!-- TA Login -->
-    <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-md mb-6 text-center " >
-      <h3 class="text-2xl font-semibold text-gray-700 mb-4">Teaching Assistant Login</h3>
-      <form @submit.prevent="login" class="space-y-4">
-        <div>
-          <label for="username" class="block text-left text-sm font-medium text-gray-600 mb-1">Username</label>
-          <input v-model="username" type="text" id="username" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Username" required />
-        </div>
-        <div>
-          <label for="password" class="block text-left text-sm font-medium text-gray-600 mb-1">Password</label>
-          <input v-model="password" type="password" id="password" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Password" required />
-        </div>
-        <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">Login</button>
-      </form>
-    </div>
-
-    <!-- Teacher Login -->
-    <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-md text-center">
-      <h3 class="text-2xl font-semibold text-gray-700 mb-4">Teacher Login</h3>
-      <form @submit.prevent="loginTeacher" class="space-y-4">
-        <div>
-          <label for="teacher_username" class="block text-left text-sm font-medium text-gray-600 mb-1">Username</label>
-          <input v-model="teacher_username" type="text" id="teacher_username" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Teacher Username" required />
-        </div>
-        <div>
-          <label for="teacher_password" class="block text-left text-sm font-medium text-gray-600 mb-1">Password</label>
-          <input v-model="teacher_password" type="password" id="teacher_password" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Password" required />
-        </div>
-        <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">Login</button>
-      </form>
-    </div>
-    </div>
+<router-link to ="Talogin" class="styled-button">
+  Sign in for Teacher Assistant
+  <div class="inner-button">
+    <svg
+      id="Arrow"
+      viewBox="0 0 32 32"
+      xmlns="http://www.w3.org/2000/svg"
+      height="30px"
+      width="30px"
+      class="icon"
+    >
+      <defs>
+        <linearGradient y2="100%" x2="100%" y1="0%" x1="0%" id="iconGradient">
+          <stop style="stop-color:#FFFFFF;stop-opacity:1" offset="0%"></stop>
+          <stop style="stop-color:#AAAAAA;stop-opacity:1" offset="100%"></stop>
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#iconGradient)"
+        d="M4 15a1 1 0 0 0 1 1h19.586l-4.292 4.292a1 1 0 0 0 1.414 1.414l6-6a.99.99 0 0 0 .292-.702V15c0-.13-.026-.26-.078-.382a.99.99 0 0 0-.216-.324l-6-6a1 1 0 0 0-1.414 1.414L24.586 14H5a1 1 0 0 0-1 1z"
+      ></path>
+    </svg>
   </div>
+</router-link>
+<br><br>
+<router-link to ="Teacherlogin" class="styled-button">
+  Sign in for Teacher
+  <div class="inner-button">
+    <svg
+      id="Arrow"
+      viewBox="0 0 32 32"
+      xmlns="http://www.w3.org/2000/svg"
+      height="30px"
+      width="30px"
+      class="icon"
+    >
+      <defs>
+        <linearGradient y2="100%" x2="100%" y1="0%" x1="0%" id="iconGradient">
+          <stop style="stop-color:#FFFFFF;stop-opacity:1" offset="0%"></stop>
+          <stop style="stop-color:#AAAAAA;stop-opacity:1" offset="100%"></stop>
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#iconGradient)"
+        d="M4 15a1 1 0 0 0 1 1h19.586l-4.292 4.292a1 1 0 0 0 1.414 1.414l6-6a.99.99 0 0 0 .292-.702V15c0-.13-.026-.26-.078-.382a.99.99 0 0 0-.216-.324l-6-6a1 1 0 0 0-1.414 1.414L24.586 14H5a1 1 0 0 0-1 1z"
+      ></path>
+    </svg>
+  </div>
+</router-link>
+<br><br>
+<router-link to ="Studentlogin" class="styled-button">
+  Sign in for Student
+  <div class="inner-button">
+    <svg
+      id="Arrow"
+      viewBox="0 0 32 32"
+      xmlns="http://www.w3.org/2000/svg"
+      height="30px"
+      width="30px"
+      class="icon"
+    >
+      <defs>
+        <linearGradient y2="100%" x2="100%" y1="0%" x1="0%" id="iconGradient">
+          <stop style="stop-color:#FFFFFF;stop-opacity:1" offset="0%"></stop>
+          <stop style="stop-color:#AAAAAA;stop-opacity:1" offset="100%"></stop>
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#iconGradient)"
+        d="M4 15a1 1 0 0 0 1 1h19.586l-4.292 4.292a1 1 0 0 0 1.414 1.414l6-6a.99.99 0 0 0 .292-.702V15c0-.13-.026-.26-.078-.382a.99.99 0 0 0-.216-.324l-6-6a1 1 0 0 0-1.414 1.414L24.586 14H5a1 1 0 0 0-1 1z"
+      ></path>
+    </svg>
+  </div>
+</router-link>
+<br><br>
+<router-link to ="Teacherlogin" class="styled-button">
+  Sign in for Staff
+  <div class="inner-button">
+    <svg
+      id="Arrow"
+      viewBox="0 0 32 32"
+      xmlns="http://www.w3.org/2000/svg"
+      height="30px"
+      width="30px"
+      class="icon"
+    >
+      <defs>
+        <linearGradient y2="100%" x2="100%" y1="0%" x1="0%" id="iconGradient">
+          <stop style="stop-color:#FFFFFF;stop-opacity:1" offset="0%"></stop>
+          <stop style="stop-color:#AAAAAA;stop-opacity:1" offset="100%"></stop>
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#iconGradient)"
+        d="M4 15a1 1 0 0 0 1 1h19.586l-4.292 4.292a1 1 0 0 0 1.414 1.414l6-6a.99.99 0 0 0 .292-.702V15c0-.13-.026-.26-.078-.382a.99.99 0 0 0-.216-.324l-6-6a1 1 0 0 0-1.414 1.414L24.586 14H5a1 1 0 0 0-1 1z"
+      ></path>
+    </svg>
+  </div>
+</router-link>
+  </div>
+</div>
 </template>
 
 
 
 <script>
-import axios from 'axios';
 import 'animate.css';
-export default {
-  data() {
-    return {
-      username: '',
-      password: '',
-      teacher_username: '', // Add teacher_username
-      teacher_password: '', // Add teacher_password
-    };
-  },
-  methods: {
-    async login() {
-      try {
-        const response = await axios.post('http://127.0.0.1:5000/login', {
-          username: this.username,
-          password: this.password,
-        }, {
-          withCredentials: true,
-        });
-        const token = response.data.access_token;
-        localStorage.setItem('access_token', token);
-
-        if (response.data.message === 'Login successful') {
-          this.$router.push('/tahome');
-        } else {
-          alert('Login failed');
-        }
-      } catch (error) {
-        console.error('Login error:', error);
-        alert('An error occurred during login');
-      }
-    },
-    async loginTeacher() {
-      try {
-        const response = await axios.post('http://127.0.0.1:5000/login_teacher', {
-          Teacher_name: this.teacher_username,
-          password: this.teacher_password,
-        }, {
-          withCredentials: true,
-        });
-
-        const token = response.data.access_token;
-        localStorage.setItem('access_token', token);
-
-        if (response.data.message === 'Login successful') {
-          this.$router.push('/teacherhome');
-        } else {
-          alert('Login failed. Please check your credentials.');
-        }
-      } catch (error) {
-        if (error.response) {
-          alert('An error occurred during login: ' + error.response.data.error);
-        } else if (error.request) {
-          console.error('No response received:', error.request);
-          alert('No response received from the server.');
-        } else {
-          console.error('Error setting up the request:', error.message);
-          alert('Error setting up the request: ' + error.message);
-        }
-      }
-    },
-  },
-};
 </script>
 
 <style scoped>
@@ -147,4 +152,83 @@ button {
   margin-top: 15px;
   color: red;
 }
+.styled-button {
+  position: relative;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #ffffff;
+  background: linear-gradient(to bottom, #171717, #242424);
+  border-radius: 9999px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 1), 0 10px 20px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #292929;
+  width: 400px; /* Fixed width to ensure uniform size */
+  height: 60px; /* Fixed height for consistency */
+}
+
+.styled-button::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  right: -1px;
+  bottom: -1px;
+  left: -1px;
+  background: linear-gradient(to bottom, #292929, #000000);
+  z-index: -1;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  opacity: 1;
+}
+
+.styled-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 1), 0 5px 10px rgba(0, 0, 0, 0.4);
+}
+
+.styled-button .inner-button {
+  position: relative; /* Ensure relative positioning for pseudo-element */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, #171717, #242424);
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 1);
+  border: 1px solid #252525;
+  transition: all 0.2s ease;
+}
+
+.styled-button .inner-button::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  right: -1px;
+  bottom: -1px;
+  left: -1px;
+  background: linear-gradient(to bottom, #292929, #000000);
+  z-index: -1;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  opacity: 1;
+}
+
+.styled-button .inner-button .icon {
+  filter: drop-shadow(0 10px 20px rgba(26, 25, 25, 0.9))
+    drop-shadow(0 0 4px rgba(0, 0, 0, 1));
+  transition: all 0.4s ease-in-out;
+}
+
+.styled-button .inner-button .icon:hover {
+  filter: drop-shadow(0 10px 20px rgba(50, 50, 50, 1))
+    drop-shadow(0 0 20px rgba(2, 2, 2, 1));
+  transform: rotate(-35deg);
+}
+
 </style>

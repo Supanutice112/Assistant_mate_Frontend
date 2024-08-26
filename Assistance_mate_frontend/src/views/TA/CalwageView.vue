@@ -1,6 +1,6 @@
 <template>
   <div class="wage-calculator">
-    <h1>Calculate Wages</h1>
+    <h1 class="title">Calculate Wages</h1>
     <form @submit.prevent="calculateWage" class="wage-form">
       <div class="input-group">
         <label for="userType">User Type:</label>
@@ -55,7 +55,7 @@
           required
         />
       </div>
-      <button type="submit">Calculate Total Wage</button>
+      <button type="submit" class="calculate-button">Calculate Total Wage</button>
     </form>
     <div v-if="totalWage !== null" class="result">
       <h2>Total Wage: THB {{ totalWage.toFixed(2) }}</h2>
@@ -102,9 +102,18 @@ export default {
   max-width: 500px;
   margin: auto;
   padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title {
+  text-align: center;
+  font-size: 1.8em;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
 }
 
 .wage-form {
@@ -120,47 +129,56 @@ export default {
 
 label {
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  color: #555;
 }
 
 input[type='number'],
 select {
   padding: 10px;
   border: 2px solid #ccc;
-  border-radius: 4px;
-  transition: border-color 0.3s;
+  border-radius: 8px;
+  font-size: 1em;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 input[type='number']:focus,
 select:focus {
   border-color: #4caf50;
   outline: none;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
 }
 
-button {
+.calculate-button {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   background-color: #4caf50;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
-button:hover {
+.calculate-button:hover {
   background-color: #45a049;
+  transform: translateY(-2px);
 }
 
 .result {
   margin-top: 20px;
-  padding: 10px;
+  padding: 15px;
   background-color: #e8f5e9;
-  border-radius: 4px;
+  border-radius: 8px;
   text-align: center;
+  font-size: 1.3em;
+  color: #2e7d32;
 }
 
 h2 {
-  color: #2e7d32;
+  margin: 0;
+  font-weight: bold;
 }
 </style>

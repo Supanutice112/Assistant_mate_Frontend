@@ -1,25 +1,31 @@
 <template>
-  <div>
-    <h1>TA Check Attendance for Course ID: {{ courseId }}</h1>
-    <form @submit.prevent="submitCheckIn">
-      <label for="date">Date:</label>
-      <input type="date" id="date" v-model="checkInData.date" required>
+  <div class="container mx-auto p-6 bg-white shadow-md rounded-lg">
+    <h1 class="text-2xl font-semibold mb-6 text-center">TA Check Attendance for Course ID: {{ courseId }}</h1>
+    <form @submit.prevent="submitCheckIn" class="space-y-4">
+      <div>
+        <label for="date" class="block text-sm font-medium text-gray-700">Date:</label>
+        <input type="date" id="date" v-model="checkInData.date" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+      </div>
 
-      <label for="startTime">Start Time:</label>
-      <input type="time" id="startTime" v-model="checkInData.startTime" required>
+      <div>
+        <label for="startTime" class="block text-sm font-medium text-gray-700">Start Time:</label>
+        <input type="time" id="startTime" v-model="checkInData.startTime" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+      </div>
 
-      <label for="endTime">End Time:</label>
-      <input type="time" id="endTime" v-model="checkInData.endTime" required>
+      <div>
+        <label for="endTime" class="block text-sm font-medium text-gray-700">End Time:</label>
+        <input type="time" id="endTime" v-model="checkInData.endTime" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+      </div>
 
-      <p v-if="timeError" class="error">Start Time must be before End Time.</p>
+      <p v-if="timeError" class="text-red-600 text-sm">Start Time must be before End Time.</p>
 
-      <button type="submit" :disabled="loading">
+      <button type="submit" :disabled="loading" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
         <span v-if="loading">Processing...</span>
         <span v-else>Check Attendance</span>
       </button>
     </form>
 
-    <p v-if="message" :class="{'message': true, 'success': success, 'error': !success}">{{ message }}</p>
+    <p v-if="message" :class="{'text-center mt-4 font-semibold': true, 'text-green-600': success, 'text-red-600': !success}">{{ message }}</p>
   </div>
 </template>
 
@@ -60,60 +66,48 @@ export default {
       }
     },
     async submitCheckIn() {
-  if (!this.validateTimes()) {
-    this.message = 'Please correct the errors and try again.';
-    this.success = false;
-    return;
-  }
-  this.loading = true;
-  try {
-    const response = await axios.post('http://127.0.0.1:5000/api/checkin', {
-      course_id: this.courseId,
-      date: this.checkInData.date,
-      startTime: this.checkInData.startTime,
-      endTime: this.checkInData.endTime
-    }, {
-      withCredentials: true, // Ensure credentials are sent
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      if (!this.validateTimes()) {
+        this.message = 'Please correct the errors and try again.';
+        this.success = false;
+        return;
       }
-    });
-    this.message = response.data.message;
-    this.success = true;
-    this.checkInData.date = '';
-    this.checkInData.startTime = '';
-    this.checkInData.endTime = '';
-  } catch (error) {
-    this.message = 'Failed to check in attendance. ' + (error.response ? error.response.data.error : '');
-    this.success = false;
-    console.error(error);
-  } finally {
-    this.loading = false;
-  }
+      this.loading = true;
+      try {
+        const response = await axios.post('http://127.0.0.1:5000/api/checkin', {
+          course_id: this.courseId,
+          date: this.checkInData.date,
+          startTime: this.checkInData.startTime,
+          endTime: this.checkInData.endTime
+        }, {
+          withCredentials: true, // Ensure credentials are sent
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          }
+        });
+        this.message = response.data.message;
+        this.success = true;
+        this.checkInData.date = '';
+        this.checkInData.startTime = '';
+        this.checkInData.endTime = '';
+      } catch (error) {
+        this.message = 'Failed to check in attendance. ' + (error.response ? error.response.data.error : '');
+        this.success = false;
+        console.error(error);
+      } finally {
+        this.loading = false;
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-input, button {
-  padding: 8px;
-  margin-top: 5px;
+.container {
+  max-width: 500px;
 }
-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.message {
-  margin-top: 20px;
-  font-weight: bold;
-}
-.success {
-  color: green;
-}
-.error {
-  color: red;
+
+.space-y-4 > * + * {
+  margin-top: 1rem;
 }
 </style>
