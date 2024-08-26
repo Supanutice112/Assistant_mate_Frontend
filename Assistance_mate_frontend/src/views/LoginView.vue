@@ -5,9 +5,9 @@
       <h1 class="text-3xl font-bold text-green-700">Welcome to Assistant Mate</h1>
       <p class="text-gray-600">Please login to continue</p>
     </header>
-
+  <div class = "animate__animated animate__fadeInLeft">
     <!-- TA Login -->
-    <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-md mb-6 text-center">
+    <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-md mb-6 text-center " >
       <h3 class="text-2xl font-semibold text-gray-700 mb-4">Teaching Assistant Login</h3>
       <form @submit.prevent="login" class="space-y-4">
         <div>
@@ -37,6 +37,7 @@
         <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">Login</button>
       </form>
     </div>
+    </div>
   </div>
 </template>
 
@@ -44,7 +45,7 @@
 
 <script>
 import axios from 'axios';
-
+import 'animate.css';
 export default {
   data() {
     return {

@@ -4,7 +4,7 @@
     
     <!-- Course Selection -->
     <div class="mb-4">
-      <label for="course" class="block text-lg font-medium">Select Course:</label>
+      <label for="course" class="block text-lg font-medium">Select Course</label>
       <select v-model="selectedCourse" @change="fetchTAs" class="mt-2 p-2 border rounded w-full">
         <option v-for="course in courses" :key="course.courseid" :value="course.courseid">
           {{ course.course_name }}
@@ -14,7 +14,7 @@
 
     <!-- TA Selection -->
     <div v-if="selectedCourse" class="mb-4">
-      <label for="ta" class="block text-lg font-medium">Select TA:</label>
+      <label for="ta" class="block text-lg font-medium">Select TA</label>
       <select v-model="selectedTA" class="mt-2 p-2 border rounded w-full">
         <option v-for="ta in tas" :key="ta.ta_id" :value="ta.ta_id">
           {{ ta.ta_name }}
@@ -24,12 +24,11 @@
 
     <!-- Evaluation Form -->
     <div v-if="selectedCourse && selectedTA" class="mb-4">
-      <h3 class="text-xl font-semibold mb-2">Submit Evaluation</h3>
       <form @submit.prevent="submitEvaluation">
-        <label for="score" class="block text-lg font-medium">Score:</label>
+        <label for="score" class="block text-lg font-medium">Score</label>
         <input type="number" v-model="score" min="0" max="10" required class="mt-2 p-2 border rounded w-full" />
 
-        <label for="comment" class="block text-lg font-medium mt-4">Comment:</label>
+        <label for="comment" class="block text-lg font-medium mt-4">Comment</label>
         <textarea v-model="comment" required class="mt-2 p-2 border rounded w-full" rows="4"></textarea>
 
         <button type="submit" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
