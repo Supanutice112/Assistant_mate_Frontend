@@ -8,10 +8,10 @@
           <th class="border border-gray-300 p-2">Date</th>
           <th class="border border-gray-300 p-2">Course</th>
           <th class="border border-gray-300 p-2">Hours Worked</th>
-          <th class="border border-gray-300 p-2">ค่าสอนชั่วโมงละ</th>
+          <th class="border border-gray-300 p-2">Wage per Hour</th>
           <th class="border border-gray-300 p-2">Total</th>
-          <th class="border border-gray-300 p-2">ผู้รับเงิน</th>
-          <th class="border border-gray-300 p-2">หมายเหตุ</th>
+          <th class="border border-gray-300 p-2">Recipient</th>
+          <th class="border border-gray-300 p-2">Note</th>
         </tr>
       </thead>
       <tbody>
@@ -28,7 +28,7 @@
       </tbody>
       <tfoot>
         <tr class="bg-gray-100">
-          <td colspan="4" class="border border-gray-300 p-2 font-bold text-right">รวมจำนวนเงินที่ขอเบิก</td>
+          <td colspan="4" class="border border-gray-300 p-2 font-bold text-right">Total Amoung</td>
           <td class="border border-gray-300 p-2 font-bold text-right">{{ totalAmount }}</td>
           <td colspan="3" class="border border-gray-300 p-2 font-bold text-center">({{ totalAmountText }})</td>
         </tr>

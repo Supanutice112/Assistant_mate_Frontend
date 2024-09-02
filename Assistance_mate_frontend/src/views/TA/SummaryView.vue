@@ -1,7 +1,7 @@
 <template>
   <div class="p-4">
     <div v-for="(courseSummary, courseId) in groupedSummary" :key="courseId">
-      <h2 class="text-lg font-bold mb-2 text-left">Course ID: {{ courseId }}</h2>
+      <h2 class="text-lg font-bold mb-2 text-left">Course: {{ courseId }}</h2>
       <table class="table-auto w-full border-collapse border border-gray-300 mb-4">
         <thead>
           <tr class="bg-gray-200">
@@ -20,7 +20,9 @@
       </table>
     </div>
     <div class="mt-4 footer">
-      <router-link to="/underformview" class="button">Generate disbursement form for Undergraduate</router-link>
+      <router-link to="/underformview" class="button">Generate disbursement form Graduate</router-link>
+      <br>
+      <router-link to="/graformview" class="button">Generate disbursement form Undergraduate</router-link>
     </div>
   </div>
 </template>

@@ -56,7 +56,7 @@
           }
         } catch (error) {
           console.error('Login error:', error);
-          alert('An error occurred during login');
+          alert('An invalid username or password');
         }
       }
     }
