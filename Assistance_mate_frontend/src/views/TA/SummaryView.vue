@@ -20,30 +20,60 @@
       </table>
     </div>
     <div class="mt-4 footer">
-      <router-link to="/underformview" class="button">Generate disbursement form Graduate</router-link>
-      <br>
-      <router-link to="/graformview" class="button">Generate disbursement form Undergraduate</router-link>
+      <router-link
+        v-if="ta_status === 'graduated'"
+        to="/graformview"
+        class="button"
+      >
+        Generate disbursement form for Graduated
+      </router-link>
+      <router-link
+        v-else
+        to="/underformview"
+        class="button"
+      >
+        Generate disbursement form for Undergraduate
+      </router-link>
     </div>
   </div>
 </template>
-
 
 <script>
 export default {
   data() {
     return {
-      groupedSummary: {}
+      groupedSummary: {},
+      ta_status: '',  // TA status will be set here
     };
   },
   created() {
+    this.fetchTaStatus();  // Fetch TA status when component is created
     this.fetchAttendanceSummary();
   },
   methods: {
+    async fetchTaStatus() {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/api/get_ta_status', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          }
+        });
+        const data = await response.json();
+        if (data.ta_status) {
+          this.ta_status = data.ta_status;
+          // Optionally store ta_status in localStorage or Vuex if needed elsewhere
+        } else {
+          console.error('Failed to retrieve TA status:', data.message);
+        }
+      } catch (error) {
+        console.error('Error fetching TA status:', error);
+      }
+    },
     async fetchAttendanceSummary() {
       try {
         const response = await fetch('http://127.0.0.1:5000/api/attendance_summary', {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
           }
         });
         const data = await response.json();
@@ -51,24 +81,22 @@ export default {
         // Group by course_id
         const grouped = data.attendance.reduce((acc, record) => {
           const courseId = record.course_id;
-          
+
           if (!acc[courseId]) {
             acc[courseId] = [];
           }
 
-          if (!acc[courseId].find(r => r.ta_name === record.ta_name)) {
-            acc[courseId].push({
+          let taSummary = acc[courseId].find(r => r.ta_name === record.ta_name);
+          if (!taSummary) {
+            taSummary = {
               ta_name: record.ta_name,
               total_hours_worked: 0,
               attendance_count: 0
-            });
+            };
+            acc[courseId].push(taSummary);
           }
 
-          const taSummary = acc[courseId].find(r => r.ta_name === record.ta_name);
-
-          const minutesWorked = record.minutes_worked;
-          const hoursWorked = minutesWorked / 60;
-
+          const hoursWorked = record.minutes_worked / 60;
           taSummary.total_hours_worked += hoursWorked;
           taSummary.attendance_count += 1;
 
@@ -76,15 +104,15 @@ export default {
         }, {});
 
         // Format data
-        this.groupedSummary = Object.entries(grouped).reduce((acc, [courseId, records]) => {
-          acc[courseId] = records.map(record => ({
-            ...record,
-            total_hours_worked: record.total_hours_worked.toFixed(2),
-            attendance_count: record.attendance_count
-          }));
-          return acc;
-        }, {});
-
+        this.groupedSummary = Object.fromEntries(
+          Object.entries(grouped).map(([courseId, records]) => [
+            courseId,
+            records.map(record => ({
+              ...record,
+              total_hours_worked: record.total_hours_worked.toFixed(2)
+            }))
+          ])
+        );
       } catch (error) {
         console.error('Failed to fetch attendance summary:', error);
       }
@@ -93,22 +121,11 @@ export default {
 };
 </script>
 
-
 <style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.content {
-  flex: 1;
-}
-
 .footer {
   padding: 1rem;
   text-align: center;
-  background-color: #ffffff; /* Optional: Add background color if desired */
+  background-color: #ffffff;
 }
 
 .button {
@@ -133,7 +150,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #27bb79; /* Set your button color here */
+  background-color: #27bb79;
   border-radius: 10rem;
   z-index: -2;
 }
@@ -145,7 +162,7 @@ export default {
   left: 0;
   width: 0%;
   height: 100%;
-  background-color: #35a704; /* Darker color for hover effect */
+  background-color: #35a704;
   transition: all 0.3s;
   border-radius: 10rem;
   z-index: -1;
@@ -157,39 +174,5 @@ export default {
 
 .button:hover:before {
   width: 100%;
-}
-
-/* Optional reset for presentation */
-* {
-  font-family: Arial, sans-serif;
-  text-decoration: none;
-  font-size: 20px;
-}
-
-.container {
-  padding-top: 50px;
-  margin: 0 auto;
-  width: 100%;
-  text-align: center;
-}
-
-h1 {
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  margin-bottom: 2rem;
-  color: #777;
-}
-
-span {
-  display: block;
-  margin-top: 2rem;
-  font-size: 0.7rem;
-  color: #777;
-}
-
-span a {
-  font-size: 0.7rem;
-  color: #999;
-  text-decoration: underline;
 }
 </style>
