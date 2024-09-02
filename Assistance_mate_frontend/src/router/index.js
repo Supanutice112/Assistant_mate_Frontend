@@ -21,6 +21,9 @@ import UnderformView from '@/views/TA/UnderformView.vue'
 import GraformView from '@/views/TA/GraformView.vue'
 import TeacherLoginView from '@/views/TeacherLoginView.vue'
 import TaLoginView from '@/views/TaLoginView.vue'
+import studentLogin from '@/views/student/studentLogin.vue'
+import studentdashboardView from '@/views/master/studentdashboardView.vue'
+import StudentEvaluate from '@/views/student/StudentEvaluate.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -43,6 +46,11 @@ const router = createRouter({
       name: 'underform',
       path: '/underformview', 
       component: UnderformView 
+    },
+    {
+      path: '/studentlogin',
+      name:'studentLogin',
+      component: studentLogin  
     },
     {
       name: 'graform',
@@ -138,6 +146,19 @@ const router = createRouter({
           component: TeacherNotificationView
         },
       ]
+    },
+    {
+      path: '/studentdashboardView',
+      name: 'studentdashboardview',
+      component: studentdashboardView,
+      children: [
+       {
+        name: 'StudentEvaluate',
+        path: '/StudentEvaluate',
+        component: StudentEvaluate
+       }
+      ]
+      
     }
   ]
 })
