@@ -1,139 +1,116 @@
 <template>
-  <div class="w-screen h-screen flex">
-      <!-- Sidebar -->
-      <div class="w-[400px] h-full bg-gray-200 text-white " v-show="showSide" >
-          <div class="h-[50px] bg-gray-900 flex justify-start  items-center ">
-              <div class="px-[20px] flex">
-              <h3 class="font-bold text-xl">Dashboard</h3>
-          </div>
+  <div class="w-screen h-screen flex overflow-hidden">
+    <!-- Sidebar -->
+    <div class="w-[250px] h-full bg-gray-900 text-white flex-shrink-0">
+      <div class="h-[60px] bg-gray-800 flex items-center px-4">
+        <h3 class="font-bold text-lg">Dashboard</h3>
       </div>
-      <div class="h-[calc(100vh-50px)] bg-gray-800 py-[20px] flex">
-          <div class="flex flex-col justify-between h-full px-[20px] space-y-[10px]">
-              <div class=" flex flex-col justify-between space-y-[10px]">
-                          <router-link to="/studenthome" class="inline-flex relative items-center py-[10px] px-[10px] w-full text-sm font-medium rounded-md border-gray-200 hover:bg-gray-200 hover:text-gray-800  transition duration-400 ease-in-out">
-                              <svg aria-hidden="true" class="mr-2 w-[25px] h-[25px] fill-current" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path>
-                              </svg>
-                              Homepage
-                          </router-link>
-                          <router-link to="/studentprofile" class="inline-flex relative items-center py-[10px] px-[10px] w-full text-sm font-medium rounded-md border-gray-200 hover:bg-gray-200 hover:text-gray-800  transition duration-400 ease-in-out">
-                              <svg aria-hidden="true" class="mr-2 w-[25px] h-[25px] fill-current" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path>
-                              </svg>
-                              Profile
-                          </router-link>
-                          <router-link to="/studentevaluate" class="inline-flex relative items-center py-[10px] px-[10px] w-full text-sm font-medium rounded-md border-gray-200 hover:bg-gray-200 hover:text-gray-800  transition duration-400 ease-in-out">
-                              <svg aria-hidden="true" class="mr-2 w-[25px] h-[25px] fill-current" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path>
-                              </svg>
-                              Evaluate Teacher Assistant
-                          </router-link>
-                      </div>
-              </div>
-          </div>
+      <div class="h-[calc(100vh-60px)] bg-gray-800 py-4 flex flex-col space-y-2 px-2 overflow-y-auto">
+        <router-link to="/studenthome" class="inline-flex items-center py-3 px-4 text-sm font-medium rounded-md hover:bg-gray-700 transition duration-200 ease-in-out" active-class="bg-blue-600">
+          <svg class="mr-3 w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 7a2 2 0 114 0 2 2 0 01-4 0zM4.05 9.05A7.978 7.978 0 0110 4a7.978 7.978 0 015.95 2.05c-.2.54-.76.95-1.4.95H5.45c-.64 0-1.2-.41-1.4-.95z" clip-rule="evenodd"></path>
+          </svg>
+          Home
+        </router-link>
+        <router-link to="/studentprofile" class="inline-flex items-center py-3 px-4 text-sm font-medium rounded-md hover:bg-gray-700 transition duration-200 ease-in-out" active-class="bg-blue-600">
+          <svg class="mr-3 w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 7a2 2 0 114 0 2 2 0 01-4 0zM4.05 9.05A7.978 7.978 0 0110 4a7.978 7.978 0 015.95 2.05c-.2.54-.76.95-1.4.95H5.45c-.64 0-1.2-.41-1.4-.95z" clip-rule="evenodd"></path>
+          </svg>
+          Profile
+        </router-link>
+        <router-link to="/studentevaluate" class="inline-flex items-center py-3 px-4 text-sm font-medium rounded-md hover:bg-gray-700 transition duration-200 ease-in-out" active-class="bg-blue-600">
+          <svg class="mr-3 w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 7a2 2 0 114 0 2 2 0 01-4 0zM4.05 9.05A7.978 7.978 0 0110 4a7.978 7.978 0 015.95 2.05c-.2.54-.76.95-1.4.95H5.45c-.64 0-1.2-.41-1.4-.95z" clip-rule="evenodd"></path>
+          </svg>
+          Evaluate Teacher Assistant
+        </router-link>
       </div>
-      
-      
-      <div class="w-full h-full bg-gray-400">
-          <div class="h-[50px] bg-gray-100 flex items-center shadow-sm px-[20px] w-full py-[10px] z-10 border-b ">
-              <!-- Hamberger menu -->
-              <div class="cursor-pointer w-[30px]" @click="toggleSideBar">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class=" w-[25px] h-[25px] ">
-                    <!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-                    <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
-                  </svg>
-                </div>
-                <!-- Search bar -->
-                <div class="w-[calc(100%-30px)] flex">
-                  <div class="w-[calc(100%-200px)] flex justify-center ">
-                      <!-- Search bar -->
-                      <form class="flex items-center w-[500px] ">
-                          <label for="voice-search" class="sr-only">Search</label>
-                          <div class="relative w-full justify-center">
-                              <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                              </div>
-                          </div>
-                      </form>
-                  </div>
-                   <!-- User login -->
-                   <div class="w-[200px] ">
-                      <div class="flex items-center justify-start space-x-4" @click="toggleDrop">
-                          <img class="w-10 h-10 rounded-full border-2 border-black" src="https://cdn-icons-png.freepik.com/256/1077/1077114.png?semt=ais_hybrid" alt="">
-                          <div class="font-semibold dark:text-black text-left">
-                              <div>{{ currentUser.username }}</div>
-                              <div class="text-xs text-blue-900 dark:text-blue-500">Teacher</div>
-                          </div>
-                      </div>
-                       <!-- Drop down -->
-                       <div v-show="showDropDown" class="absolute right-[10px] z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-                          <div class="py-1 text   -left" role="none">
-                              <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+    </div>
 
-                              <router-link to ="/" method="POST" action="#" role="none">
-                                  <button type="submit" class="text-gray-700 block w-full px-4 py-2 text-left text-sm" role="menuitem" tabindex="-1" id="menu-item-3">Sign out</button>
-                              </router-link>
-                          </div>
-                       </div>
-                   </div>
-                </div>
+    <!-- Main Content -->
+    <div class="flex-1 h-full bg-gray-100 flex flex-col">
+      <div class="h-[60px] bg-white flex items-center shadow px-4 border-b">
+        <!-- Hamburger Menu -->
+        <div class="cursor-pointer mr-4" @click="toggleSideBar">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-6 h-6 text-gray-700">
+            <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
+          </svg>
+        </div>
+
+        <!-- User Profile -->
+        <div class="ml-auto relative">
+          <div class="flex items-center cursor-pointer" @click="toggleDrop">
+            <img class="w-10 h-10 rounded-full border-2 border-gray-200" src="https://cdn-icons-png.freepik.com/256/1077/1077114.png?semt=ais_hybrid" alt="User Avatar">
+            <div class="ml-3 text-gray-700">
+              <div class="text-sm font-semibold">{{ currentUser.username }}</div>
+              <div class="text-xs text-blue-900 dark:text-blue-500">Student</div>
+            </div>
           </div>
-          <div class="h-[calc(100vh-50px)] bg-gray-50 p-[20px]">
-              <div class="border border-gray-300 rounded-md p-[20px] h-full">
-                  <router-view></router-view>
-              </div>
+
+          <!-- Dropdown Menu -->
+          <div v-show="showDropDown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+            <router-link to="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</router-link>
           </div>
+        </div>
       </div>
-      <!-- Main content -->
+
+      <!-- Content Area -->
+      <div class="flex-1 p-4 overflow-auto">
+        <div class="bg-white border border-gray-200 rounded-lg shadow p-4">
+          <router-view></router-view>
+        </div>
+      </div>
+    </div>
   </div>
-  
 </template>
 
 <script>
 import axios from 'axios';
 
 export default {
-data() {
-  return {
-    showDropDown: false,
-    showSide: true, // Initialize showSide to true
-    currentUser: {
-      username: '',
-      role: ''
+  data() {
+    return {
+      showDropDown: false,
+      showSide: true, // Sidebar is shown by default
+      currentUser: {
+        username: '',
+        role: ''
+      }
+    }
+  },
+  created() {
+    this.fetchCurrentUser();
+  },
+  methods: {
+    // Toggle sidebar visibility
+    toggleSideBar() {
+      this.showSide = !this.showSide;
+    },
+    // Toggle user dropdown menu
+    toggleDrop() {
+      this.showDropDown = !this.showDropDown;
+    },
+    // Fetch current user data from backend
+    async fetchCurrentUser() {
+      try {
+        const response = await axios.get('http://127.0.0.1:5000/api/current_user', {
+          withCredentials: true,
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          },
+        });
+        this.currentUser = response.data;
+      } catch (error) {
+        console.error('Error fetching current user:', error);
+      }
     }
   }
-},
-created() {
-  this.fetchCurrentUser();
-},
-methods: {
-  // hide/show sidebar
-  toggleSideBar() {
-    this.showSide = !this.showSide;
-  },
-  // toggle user dropdown
-  toggleDrop() {
-    this.showDropDown = !this.showDropDown;
-  },
-  // fetch current user data from backend
-  async fetchCurrentUser() {
-    try {
-      const response = await axios.get('http://127.0.0.1:5000/api/current_user', {
-        withCredentials: true,
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-        },
-      });
-      this.currentUser = response.data;
-    } catch (error) {
-      console.error('Error fetching current user:', error);
-    }
-  }
-}
 }
 </script>
+
 <style scoped>
 .router-link-exact-active {
-  background-color: #4299e1;
+  background-color: #2563eb;
   color: white;
 }
 </style>

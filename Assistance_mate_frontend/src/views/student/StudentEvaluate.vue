@@ -1,218 +1,184 @@
 <template>
-  <div class="container mx-auto p-4">
-    <h2 class="text-2xl font-bold mb-4">Course Evaluation</h2>
+  <div class="container mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
+    <h2 class="text-3xl font-extrabold text-center mb-6 text-gray-800">Evaluate Teaching Assistant</h2>
 
-    <!-- Evaluation Form in a Table -->
+    <!-- Evaluation Form -->
     <form @submit.prevent="submitEvaluation">
-      <table class="w-full bg-white border rounded shadow-md">
-        <tbody>
-          <!-- Course Selection -->
-          <tr>
-            <td class="p-3 border-t border-gray-200 w-1/3">
-              <label for="course" class="font-medium">Select Course</label>
-            </td>
-            <td class="p-3 border-t border-gray-200">
-              <select v-model="selectedCourse" @change="fetchTAs" class="mt-2 p-2 border rounded w-full" required>
-                <option disabled value="">Please select a course</option>
-                <option v-for="course in courses" :key="course.courseid" :value="course.courseid">
-                  {{ course.course_name }}
-                </option>
-              </select>
-            </td>
-          </tr>
+      <div class="space-y-4">
+        <!-- Name Input -->
+        <div>
+          <label for="name" class="block text-lg font-medium text-gray-700">Your Name</label>
+          <input type="text" v-model="evaluation.name" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your name" required />
+        </div>
 
-          <!-- TA Selection -->
-          <tr v-if="selectedCourse">
-            <td class="p-3 border-t border-gray-200">
-              <label for="ta" class="font-medium">Select TA</label>
-            </td>
-            <td class="p-3 border-t border-gray-200">
-              <select v-model="selectedTA" class="mt-2 p-2 border rounded w-full" required>
-                <option disabled value="">Please select a TA</option>
-                <option v-for="ta in tas" :key="ta.ta_id" :value="ta.ta_id">
-                  {{ ta.ta_name }}
-                </option>
-              </select>
-            </td>
-          </tr>
+        <!-- Course Selection -->
+        <div>
+          <label for="course" class="block text-lg font-medium text-gray-700">Select Course</label>
+          <select v-model="evaluation.course" @change="fetchSections" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+            <option disabled value="">Please select a course</option>
+            <option v-for="course in courses" :key="course.courseid" :value="course.courseid">
+              {{ course.courseid }} - {{ course.course_name }}
+            </option>
+          </select>
+        </div>
 
-          <!-- Questions -->
-          <tr v-if="selectedCourse && selectedTA">
-            <td class="p-3 border-t border-gray-200" colspan="2">
-              <div class="mb-4">
-                <label for="question1" class="font-medium">Responsiveness to Questions?</label>
-                <input type="number" v-model="question1" min="1" max="5" required class="p-2 border rounded w-full" />
-              </div>
-              <div class="mb-4">
-                <label for="question2" class="font-medium">Clarity of Explanation?</label>
-                <input type="number" v-model="question2" min="1" max="5" required class="p-2 border rounded w-full" />
-              </div>
-              <div class="mb-4">
-                <label for="question3" class="font-medium">How the TA attends classes on time?</label>
-                <input type="number" v-model="question3" min="1" max="5" required class="p-2 border rounded w-full" />
-              </div>
-            </td>
-          </tr>
+        <!-- Section Selection -->
+        <div v-if="evaluation.course">
+          <label for="section" class="block text-lg font-medium text-gray-700">Select Section</label>
+          <select v-model="evaluation.section" @change="fetchTAs" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+            <option disabled value="">Please select a section</option>
+            <option v-for="section in sections" :key="section.section" :value="section.section">
+              {{ section.section }}
+            </option>
+          </select>
+        </div>
 
-          <!-- Comment -->
-          <tr v-if="selectedCourse && selectedTA">
-            <td class="p-3 border-t border-gray-200" colspan="2">
-              <label for="comment" class="font-medium">Comment</label>
-              <textarea v-model="comment" required class="p-2 border rounded w-full" rows="4"></textarea>
-            </td>
-          </tr>
+        <!-- TA Selection -->
+        <div v-if="evaluation.course && evaluation.section">
+          <label for="taName" class="block text-lg font-medium text-gray-700">Select TA</label>
+          <select v-model="evaluation.taName" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+            <option disabled value="">Please select a TA</option>
+            <option v-for="ta in tas" :key="ta.ta_id" :value="ta.ta_name">
+              {{ ta.ta_name }}
+            </option>
+          </select>
+        </div>
 
-          <!-- Submit Button -->
-          <tr v-if="selectedCourse && selectedTA">
-            <td class="p-3 border-t border-gray-200 text-right" colspan="2">
-              <button
-                type="submit"
-                class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-                :disabled="!canSubmit"
-              >
-                Submit
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <!-- Score Input -->
+        <div v-if="evaluation.course && evaluation.section && evaluation.taName">
+          <label for="score" class="block text-lg font-medium text-gray-700">Score (1-5)</label>
+          <input type="number" v-model="evaluation.score" min="1" max="5" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter a score between 1 and 5" required />
+        </div>
+
+        <!-- Comment Input -->
+        <div v-if="evaluation.course && evaluation.section && evaluation.taName">
+          <label for="comment" class="block text-lg font-medium text-gray-700">Comments</label>
+          <textarea v-model="evaluation.comment" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="4" placeholder="Write your comments here" required></textarea>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="mt-6 text-center">
+        <button
+          type="submit"
+          class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-blue-700 transition duration-200 ease-in-out transform hover:scale-105"
+          :disabled="!canSubmit"
+        >
+          Submit Evaluation
+        </button>
+      </div>
     </form>
+
+    <!-- Error/Success Message -->
+    <div v-if="message" class="mt-6 text-center text-lg font-semibold text-red-600">
+      {{ message }}
+    </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
+      evaluation: {
+        name: '',
+        course: '', // Set to an empty string to trigger the placeholder
+        section: '',
+        taName: '',
+        score: '',
+        comment: ''
+      },
       courses: [],
+      sections: [],
       tas: [],
-      selectedCourse: null,
-      selectedTA: null,
-      question1: null,
-      question2: null,
-      question3: null,
-      comment: '',
+      message: '',
+      loading: false,
     };
   },
   computed: {
-    averageScore() {
-      const scores = [this.question1, this.question2, this.question3];
-      const validScores = scores.filter(score => score >= 1 && score <= 5);
-      if (validScores.length === 3) {
-        const total = validScores.reduce((sum, score) => sum + score, 0);
-        return (total / validScores.length).toFixed(2);
-      }
-      return null;
-    },
     canSubmit() {
-      return this.selectedCourse && this.selectedTA && this.question1 && this.question2 && this.question3 && this.comment;
-    },
-    currentDate() {
-      return new Date().toISOString().split('T')[0]; // Format as YYYY-MM-DD
+      return this.evaluation.name && this.evaluation.course && this.evaluation.section && this.evaluation.taName && this.evaluation.score && this.evaluation.comment;
     }
+  },
+  created() {
+    this.fetchCourses();
   },
   methods: {
     async fetchCourses() {
+      this.loading = true;
       try {
-        const response = await fetch("http://127.0.0.1:5000/api/courses", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-          },
-        });
-        const data = await response.json();
-        this.courses = data.courses;
+        const response = await axios.get('http://127.0.0.1:5000/api/courses');
+        this.courses = response.data.courses;
       } catch (error) {
-        console.error('Error fetching courses:', error);
+        this.message = 'Error fetching courses. Please try again.';
+        console.error(error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    async fetchSections() {
+      this.loading = true;
+      try {
+        const response = await axios.get(`http://127.0.0.1:5000/api/course_sections/${this.evaluation.course}`);
+        this.sections = response.data;
+      } catch (error) {
+        this.message = 'Error fetching sections. Please try again.';
+        console.error(error);
+      } finally {
+        this.loading = false;
       }
     },
     async fetchTAs() {
+      this.loading = true;
       try {
-        const response = await fetch(`http://127.0.0.1:5000/api/ta_for_course?course_id=${this.selectedCourse}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-          },
-        });
-        const data = await response.json();
-        this.tas = data.tas;
+        const response = await axios.get(`http://127.0.0.1:5000/api/course_tas/${this.evaluation.course}/${this.evaluation.section}`);
+        this.tas = response.data;
       } catch (error) {
-        console.error('Error fetching TAs:', error);
+        this.message = 'Error fetching TAs. Please try again.';
+        console.error(error);
+      } finally {
+        this.loading = false;
       }
     },
     async submitEvaluation() {
-      const username = localStorage.getItem('username');
-      if (!username) {
-        alert('You need to log in again.');
-        return;
-      }
-
+      this.loading = true;
       try {
-        const response = await fetch("http://127.0.0.1:5000/api/student_evaluate_submit", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-          },
-          body: JSON.stringify({
-            ta_id: this.selectedTA,
-            ta_name: this.tas.find(ta => ta.ta_id === this.selectedTA)?.ta_name,
-            score: this.averageScore,
-            evaluate_date: this.currentDate,
-            evaluator_name: username, // Ensure the correct key `evaluator_name`
-            course_id: this.selectedCourse,
-            comment: this.comment,
-          }),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(`Error ${response.status}: ${data.message}`);
-        }
-
-        if (data.message === "Evaluation submitted successfully") {
-          alert("Evaluation submitted successfully!");
+        const response = await axios.post('http://127.0.0.1:5000/api/evaluate_ta', this.evaluation);
+        if (response.data.message === 'Evaluation submitted successfully') {
+          alert('Evaluation submitted successfully.');
           this.resetForm();
         } else {
-          alert("Failed to submit evaluation.");
+          this.message = 'Failed to submit evaluation.';
         }
       } catch (error) {
-        console.error('Error submitting evaluation:', error);
+        this.message = 'Error submitting evaluation. Please try again.';
+        console.error(error);
+      } finally {
+        this.loading = false;
       }
     },
     resetForm() {
-      this.selectedCourse = null;
-      this.selectedTA = null;
-      this.question1 = null;
-      this.question2 = null;
-      this.question3 = null;
-      this.comment = '';
+      this.evaluation.name = '';
+      this.evaluation.course = ''; // Reset to an empty string
+      this.evaluation.section = '';
+      this.evaluation.taName = '';
+      this.evaluation.score = '';
+      this.evaluation.comment = '';
+      this.sections = [];
       this.tas = [];
     }
-  },
-  mounted() {
-    this.fetchCourses();
-  },
+  }
 };
 </script>
 
 <style scoped>
 .container {
-  max-width: 1000px;
+  max-width: 600px;
   margin: 0 auto;
   text-align: left;
-}
-
-table {
-  width: 100%;
-  padding: auto;
-}
-
-thead th {
-  background-color: #f3f4f6;
-}
-
-td, th {
-  padding: 14px;
+  background-color: #ffffff;
 }
 
 textarea {
@@ -220,10 +186,15 @@ textarea {
 }
 
 button {
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-button:hover {
-  background-color: #2563eb;
+button:disabled {
+  background-color: #cbd5e0;
+  cursor: not-allowed;
+}
+
+.text-red-600 {
+  color: #e3342f;
 }
 </style>
