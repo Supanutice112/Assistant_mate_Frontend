@@ -21,6 +21,12 @@ import UnderformView from '@/views/TA/UnderformView.vue'
 import GraformView from '@/views/TA/GraformView.vue'
 import TeacherLoginView from '@/views/TeacherLoginView.vue'
 import TaLoginView from '@/views/TaLoginView.vue'
+import StudentDashboardView from '@/views/master/StudentDashboardView.vue'
+import StaffDashboardView from '@/views/master/StaffDashboardView.vue'
+import StaffHomeView from '@/views/Staff/StaffHomeView.vue'
+import StudentHomeView from '@/views/Student/StudentHomeView.vue'
+import StaffLoginView from '@/views/StaffLoginView.vue'
+import StudentLoginView from '@/views/StudentLoginView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -33,6 +39,16 @@ const router = createRouter({
       name: 'Teacherlogin',
       path: '/TeacherLogin', 
       component: TeacherLoginView 
+    },
+    {
+      name: 'Studentlogin',
+      path: '/Studentlogin', 
+      component: StudentLoginView 
+    },
+    {
+      name: 'Stafflogin',
+      path: '/Stafflogin', 
+      component: StaffLoginView 
     },
     {
       name: 'TaLogin',
@@ -49,6 +65,9 @@ const router = createRouter({
       path: '/graformview', 
       component: GraformView 
     },
+
+
+
     {
       path: '/tadashboard',
       name: 'tadashboard',
@@ -102,6 +121,9 @@ const router = createRouter({
         },
       ]
     },
+
+
+
     {
       path: '/teacherdashboard',
       name: 'teacherdashboard',
@@ -136,6 +158,33 @@ const router = createRouter({
           name: 'teachernotification',
           path: '/teachernotification',  // Relative to '/'. This is now '/home'
           component: TeacherNotificationView
+        },
+      ]
+    },
+
+
+
+    {
+      path: '/studentdashboard',
+      name: 'studentdashboard',
+      component: StudentDashboardView,
+      children: [
+        {
+          name: 'studenthome',
+          path: '/studenthome',  // Relative to '/'. This is now '/home'
+          component: StudentHomeView
+        },
+      ]
+    },
+    {
+      path: '/staffdashboard',
+      name: 'staffdashboard',
+      component: StaffDashboardView,
+      children: [
+        {
+          name: 'staffhome',
+          path: '/staffhome',  // Relative to '/'. This is now '/home'
+          component: StaffHomeView
         },
       ]
     }
