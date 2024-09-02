@@ -50,17 +50,22 @@
     </div>
 
     <!-- Additional Information -->
-    <div class="bg-white shadow-lg rounded-lg p-6 mt-6">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-4">System Features</h2>
-      <p class="text-gray-600">Our system provides you with the following features:</p>
-      <ul class="list-disc list-inside mt-4 text-gray-600">
-        <li>Course and class management</li>
-        <li>Attendance tracking and history</li>
-        <li>Profile and personal information management</li>
-        <li>Notifications and updates</li>
-        <li>Disbursement form generation</li>
-      </ul>
-    </div>
+   <!-- Additional Information Section -->
+<div class="bg-white rounded-lg p-10 shadow-lg mt-12 text-center transform transition duration-300 hover:shadow-xl hover:scale-105">
+  <h2 class="text-3xl font-extrabold text-gray-800 mb-6">Get Started with Assistant Mate</h2>
+  <p class="text-lg text-gray-700 leading-relaxed mb-6">
+    Explore the features and tools designed to simplify your work as an educator. Whether you're managing courses, tracking attendance, or evaluating TAs, Assistant Mate has got you covered. Click on the cards above to navigate to your desired section.
+  </p>
+  <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+    <p class="text-lg text-gray-700">
+      Have any issues? Contact <span class="font-semibold text-gray-900">P.Big :</span> 
+    </p>
+    <router-link to="" class="text-lg font-semibold text-blue-600 underline hover:text-blue-800 transition duration-300 ease-in-out">
+      091-0681-232
+    </router-link>
+    <p class="text-lg text-gray-700">for tutorials and support.</p>
+  </div>
+</div>
   </div>
 </template>
 
