@@ -34,7 +34,7 @@
                                 </svg>
                                 TA List
                             </router-link>
-                            <router-link to="/teacherevaluate" class="inline-flex relative items-center py-[10px] px-[10px] w-full text-sm font-medium rounded-md border-gray-200 hover:bg-gray-200 hover:text-gray-800  transition duration-400 ease-in-out">
+                            <router-link to="/evaluateresult" class="inline-flex relative items-center py-[10px] px-[10px] w-full text-sm font-medium rounded-md border-gray-200 hover:bg-gray-200 hover:text-gray-800  transition duration-400 ease-in-out">
                                 <svg aria-hidden="true" class="mr-2 w-[25px] h-[25px] fill-current" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path>
                                 </svg>
@@ -72,8 +72,8 @@
                         <div class="flex items-center justify-start space-x-4" @click="toggleDrop">
                             <img class="w-10 h-10 rounded-full border-2 border-black" src="https://cdn-icons-png.freepik.com/256/1077/1077114.png?semt=ais_hybrid" alt="">
                             <div class="font-semibold dark:text-black text-left">
-                                <div>{{ currentUser.Teacher_name }}</div>
-                                <div class="text-xs text-blue-900 dark:text-blue-500">Teacher</div>
+                                <div>{{ currentUser.username }}</div>
+                                <div class="text-xs text-blue-900 dark:text-blue-500">Admin</div>
                             </div>
                         </div>
                          <!-- Drop down -->
@@ -129,7 +129,7 @@
     // fetch current user data from backend
     async fetchCurrentUser() {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/api/current_teacher', {
+        const response = await axios.get('http://127.0.0.1:5000/api/current_user', {
           withCredentials: true,
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('access_token')}`,

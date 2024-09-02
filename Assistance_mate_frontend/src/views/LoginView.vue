@@ -81,7 +81,7 @@
   </div>
 </router-link>
 <br><br>
-<router-link to ="Teacherlogin" class="styled-button">
+<router-link to ="stafflogin" class="styled-button">
   Sign in for Staff
   <div class="inner-button">
     <svg

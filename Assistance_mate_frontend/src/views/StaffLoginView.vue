@@ -40,7 +40,7 @@
     methods: {
       async login() {
         try {
-          const response = await axios.post('http://127.0.0.1:5000/login', {
+          const response = await axios.post('http://127.0.0.1:5000/api/admin_login', {
             username: this.username,
             password: this.password,
           }, {
