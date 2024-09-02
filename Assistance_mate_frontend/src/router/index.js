@@ -27,6 +27,8 @@ import StaffHomeView from '@/views/Staff/StaffHomeView.vue'
 import StudentHomeView from '@/views/Student/StudentHomeView.vue'
 import StaffLoginView from '@/views/StaffLoginView.vue'
 import StudentLoginView from '@/views/StudentLoginView.vue'
+import StudentProfile from '@/views/Student/StudentProfile.vue'
+import StudentEvaluate from '@/views/Student/StudentEvaluate.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -173,6 +175,16 @@ const router = createRouter({
           name: 'studenthome',
           path: '/studenthome',  // Relative to '/'. This is now '/home'
           component: StudentHomeView
+        },
+        {
+          name: 'studentprofile',
+          path: '/studentprofile',  // Relative to '/'. This is now '/home'
+          component: StudentProfile
+        },
+        {
+          name: 'studentevaluate',
+          path: '/studentevaluate',  // Relative to '/'. This is now '/home'
+          component: StudentEvaluate
         },
       ]
     },
