@@ -7,20 +7,26 @@
       </div>
       <div class="h-[calc(100vh-60px)] bg-gray-800 py-4 flex flex-col space-y-2 px-2 overflow-y-auto">
         <router-link to="/studenthome" class="inline-flex items-center py-3 px-4 text-sm font-medium rounded-md hover:bg-gray-700 transition duration-200 ease-in-out" active-class="bg-blue-600">
-          <svg class="mr-3 w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 7a2 2 0 114 0 2 2 0 01-4 0zM4.05 9.05A7.978 7.978 0 0110 4a7.978 7.978 0 015.95 2.05c-.2.54-.76.95-1.4.95H5.45c-.64 0-1.2-.41-1.4-.95z" clip-rule="evenodd"></path>
-          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" viewBox="0 0 24 24" width="30" height="30" color="#ffffff" fill="none">
+            <path d="M3.16405 11.3497L4 11.5587L4.45686 16.1005C4.715 18.6668 4.84407 19.9499 5.701 20.7249C6.55793 21.5 7.84753 21.5 10.4267 21.5H13.5733C16.1525 21.5 17.4421 21.5 18.299 20.7249C19.1559 19.9499 19.285 18.6668 19.5431 16.1005L20 11.5587L20.836 11.3497C21.5201 11.1787 22 10.564 22 9.85882C22 9.35735 21.7553 8.88742 21.3445 8.59985L13.1469 2.86154C12.4583 2.37949 11.5417 2.37949 10.8531 2.86154L2.65549 8.59985C2.24467 8.88742 2 9.35735 2 9.85882C2 10.564 2.47993 11.1787 3.16405 11.3497Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="12" cy="14.5" r="2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
           Home
         </router-link>
         <router-link to="/studentprofile" class="inline-flex items-center py-3 px-4 text-sm font-medium rounded-md hover:bg-gray-700 transition duration-200 ease-in-out" active-class="bg-blue-600">
-          <svg class="mr-3 w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 7a2 2 0 114 0 2 2 0 01-4 0zM4.05 9.05A7.978 7.978 0 0110 4a7.978 7.978 0 015.95 2.05c-.2.54-.76.95-1.4.95H5.45c-.64 0-1.2-.41-1.4-.95z" clip-rule="evenodd"></path>
-          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" viewBox="0 0 24 24" width="30" height="30" color="#ffffff" fill="none">
+            <path d="M6.57757 15.4816C5.1628 16.324 1.45336 18.0441 3.71266 20.1966C4.81631 21.248 6.04549 22 7.59087 22H16.4091C17.9545 22 19.1837 21.248 20.2873 20.1966C22.5466 18.0441 18.8372 16.324 17.4224 15.4816C14.1048 13.5061 9.89519 13.5061 6.57757 15.4816Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M16.5 6.5C16.5 8.98528 14.4853 11 12 11C9.51472 11 7.5 8.98528 7.5 6.5C7.5 4.01472 9.51472 2 12 2C14.4853 2 16.5 4.01472 16.5 6.5Z" stroke="currentColor" stroke-width="1.5" />
+        </svg>
           Profile
         </router-link>
         <router-link to="/studentevaluate" class="inline-flex items-center py-3 px-4 text-sm font-medium rounded-md hover:bg-gray-700 transition duration-200 ease-in-out" active-class="bg-blue-600">
-          <svg class="mr-3 w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 7a2 2 0 114 0 2 2 0 01-4 0zM4.05 9.05A7.978 7.978 0 0110 4a7.978 7.978 0 015.95 2.05c-.2.54-.76.95-1.4.95H5.45c-.64 0-1.2-.41-1.4-.95z" clip-rule="evenodd"></path>
+          <svg aria-hidden="true" class="mr-2 w-[25px] h-[25px] fill-current" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="2" width="14" height="16" fill="none" stroke="currentColor" stroke-width="2"></rect>
+            <line x1="6" y1="6" x2="14" y2="6" stroke="currentColor" stroke-width="2"></line>
+            <line x1="6" y1="10" x2="14" y2="10" stroke="currentColor" stroke-width="2"></line>
+            <line x1="6" y1="14" x2="10" y2="14" stroke="currentColor" stroke-width="2"></line>
+            <polyline points="4,8 6,10 8,6" fill="none" stroke="currentColor" stroke-width="2"></polyline>
           </svg>
           Evaluate Teacher Assistant
         </router-link>

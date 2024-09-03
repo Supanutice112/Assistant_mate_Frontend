@@ -1,74 +1,102 @@
 <template>
-  <div>
-    <h2>Dashboard</h2>
+  <div class="evaluation-container p-8 bg-gradient-to-b from-green-50 to-gray-100 min-h-screen">
+    <h2 class="text-4xl font-extrabold text-teal-700 mb-8">Evaluation Dashboard</h2>
 
-    <label for="taSelect">Select TA:</label>
-    <select v-model="selectedTA" id="taSelect">
-      <option v-for="ta in tas" :key="ta" :value="ta">
-        {{ ta }}
-      </option>
-    </select>
+    <!-- TA Selection Section -->
+    <div class="mb-8 flex items-center space-x-4">
+      <label for="taSelect" class="text-xl font-medium text-gray-700">Select TA:</label>
+      <select 
+        v-model="selectedTA" 
+        id="taSelect" 
+        class="mt-2 p-3 bg-white border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition">
+        <option v-for="ta in tas" :key="ta" :value="ta">{{ ta }}</option>
+      </select>
+      <button 
+        @click="fetchEvaluationResults" 
+        :disabled="!selectedTA" 
+        class="bg-gradient-to-r from-orange-500 to-teal-500 text-white px-6 py-3 rounded-lg shadow-lg hover:from-orange-600 hover:to-teal-600 disabled:bg-gray-400 transition duration-300"
+      >
+        Show Evaluation Results
+      </button>
+    </div>
 
-    <button @click="fetchEvaluationResults" :disabled="!selectedTA">Show Evaluation Results</button>
-
-    <div v-if="teacherEvaluations.length || studentEvaluations.length">
-      <h3>Teacher Evaluations</h3>
-      <table>
-        <thead>
+    <!-- Evaluation Results Section -->
+    <div v-if="teacherEvaluations.length || studentEvaluations.length" class="bg-white p-8 rounded-xl shadow-2xl">
+      <!-- Teacher Evaluations -->
+      <h3 class="text-2xl font-semibold text-orange-700 mb-6">Teacher Evaluations</h3>
+      <table class="min-w-full bg-white table-auto mb-8">
+        <thead class="bg-gradient-to-r from-orange-500 to-teal-500 text-white">
           <tr>
-            <th>Teacher</th>
-            <th>Average Score</th>
-            <th>Details</th>
+            <th class="px-6 py-3">Teacher</th>
+            <th class="px-6 py-3">Average Score</th>
+            <th class="px-6 py-3">Details</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="teacherEvaluation in teacherEvaluationSummary" :key="teacherEvaluation.Teacher_name">
-            <td>{{ teacherEvaluation.Teacher_name }}</td>
-            <td>{{ teacherEvaluation.avg_score.toFixed(2) }}</td>
-            <td><button @click="toggleDetails('teacher', teacherEvaluation.Teacher_name)">Show Details</button></td>
+          <tr v-for="teacherEvaluation in teacherEvaluationSummary" :key="teacherEvaluation.Teacher_name" class="border-b hover:bg-teal-50">
+            <td class="px-6 py-4 text-gray-700">{{ teacherEvaluation.Teacher_name }}</td>
+            <td class="px-6 py-4 text-gray-700">{{ teacherEvaluation.avg_score.toFixed(2) }}</td>
+            <td class="px-6 py-4">
+              <button 
+                @click="toggleDetails('teacher', teacherEvaluation.Teacher_name)" 
+                class="bg-gradient-to-r from-orange-500 to-teal-500 text-white px-4 py-2 rounded-lg hover:from-orange-600 hover:to-teal-600 transition duration-300"
+              >
+                Show Details
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
 
-      <h3>Student Evaluations</h3>
-      <table>
-        <thead>
+      <!-- Student Evaluations -->
+      <h3 class="text-2xl font-semibold text-green-700 mb-6">Student Evaluations</h3>
+      <table class="min-w-full bg-white table-auto">
+        <thead class="bg-gradient-to-r from-green-500 to-teal-500 text-white">
           <tr>
-            <th>TA Name</th>
-            <th>Average Score</th>
-            <th>Details</th>
+            <th class="px-6 py-3">TA Name</th>
+            <th class="px-6 py-3">Average Score</th>
+            <th class="px-6 py-3">Details</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="studentEvaluation in studentEvaluationSummary" :key="studentEvaluation.ta_name">
-            <td>{{ studentEvaluation.ta_name }}</td>
-            <td>{{ studentEvaluation.avg_score.toFixed(2) }}</td>
-            <td><button @click="toggleDetails('student', studentEvaluation.ta_name)">Show Details</button></td>
+          <tr v-for="studentEvaluation in studentEvaluationSummary" :key="studentEvaluation.ta_name" class="border-b hover:bg-green-50">
+            <td class="px-6 py-4 text-gray-700">{{ studentEvaluation.ta_name }}</td>
+            <td class="px-6 py-4 text-gray-700">{{ studentEvaluation.avg_score.toFixed(2) }}</td>
+            <td class="px-6 py-4">
+              <button 
+                @click="toggleDetails('student', studentEvaluation.ta_name)" 
+                class="bg-gradient-to-r from-green-500 to-teal-500 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-teal-600 transition duration-300"
+              >
+                Show Details
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div v-if="showDetails">
-      <h4>{{ selectedTA }} Evaluation Details</h4>
-      <div v-if="selectedType === 'teacher'">
-        <h5>Teacher Evaluations</h5>
-        <ul>
-          <li v-for="evaluation in detailedTeacherEvaluations" :key="evaluation.id">
-            <strong>Score:</strong> {{ evaluation.score }}, 
-            <strong>Comment:</strong> {{ evaluation.comment }}, 
-            <strong>Date:</strong> {{ evaluation.evaluate_date }}, 
-            <strong>Evaluator:</strong> {{ evaluation.Teacher_name }}
+    <!-- Detailed Evaluation Section -->
+    <div v-if="showDetails" class="mt-12 bg-white p-8 rounded-xl shadow-2xl">
+      <h4 class="text-3xl font-semibold text-teal-700 mb-6">{{ selectedTA }} Evaluation Details</h4>
+
+      <div v-if="selectedType === 'teacher'" class="mb-8">
+        <h5 class="text-2xl font-medium text-orange-700 mb-4">Teacher Evaluations</h5>
+        <ul class="space-y-4">
+          <li v-for="evaluation in detailedTeacherEvaluations" :key="evaluation.id" class="bg-orange-50 p-6 rounded-lg shadow-md border-l-4 border-orange-500 mb-4">
+            <p class="text-xl font-semibold text-teal-700 mb-2"><strong>Score:</strong> {{ evaluation.score }}</p>
+            <p class="text-lg text-gray-700 mb-2"><strong>Comment:</strong> {{ evaluation.comment }}</p>
+            <p class="text-lg text-gray-500"><strong>Evaluator:</strong> {{ evaluation.Teacher_name }}</p>
           </li>
         </ul>
       </div>
+
       <div v-else>
-        <h5>Student Evaluations</h5>
-        <ul>
-          <li v-for="evaluation in detailedStudentEvaluations" :key="evaluation.id">
-            <strong>Score:</strong> {{ evaluation.score }}, 
-            <strong>Comment:</strong> {{ evaluation.comment }}, 
-            <strong>Evaluator:</strong> {{ evaluation.name }}
+        <h5 class="text-2xl font-medium text-green-700 mb-4">Student Evaluations</h5>
+        <ul class="space-y-4">
+          <li v-for="evaluation in detailedStudentEvaluations" :key="evaluation.id" class="bg-green-50 p-6 rounded-lg shadow-md border-l-4 border-green-500 mb-4">
+            <p class="text-xl font-semibold text-teal-700 mb-2"><strong>Score:</strong> {{ evaluation.score }}</p>
+            <p class="text-lg text-gray-700 mb-2"><strong>Comment:</strong> {{ evaluation.comment }}</p>
+            <p class="text-lg text-gray-500"><strong>Evaluator:</strong> {{ evaluation.name }}</p>
           </li>
         </ul>
       </div>
@@ -173,3 +201,73 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.evaluation-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 16px;
+  text-align: left;
+}
+
+th {
+  background-color: #f97316;
+  color: white;
+  font-weight: 600;
+}
+
+td {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  border: 1px solid #e5e7eb;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.bg-gradient-to-r {
+  background: linear-gradient(to right, var(--tw-gradient-stops));
+}
+
+.from-orange-500 {
+  --tw-gradient-from: #f97316;
+}
+
+.to-teal-500 {
+  --tw-gradient-to: #2dd4bf;
+}
+
+.from-green-500 {
+  --tw-gradient-from: #10b981;
+}
+
+.hover\:from-orange-600:hover {
+  --tw-gradient-from: #ea580c;
+}
+
+.hover\:to-teal-600:hover {
+  --tw-gradient-to: #14b8a6;
+}
+
+.hover\:from-green-600:hover {
+  --tw-gradient-from: #059669;
+}
+
+.hover\:to-teal-600:hover {
+  --tw-gradient-to: #0d9488;
+}
+</style>
