@@ -1,86 +1,90 @@
 <template>
-    <div class="notification-container">
-      <h1>Notifications</h1>
-      <ul class="notification-list">
-        <li v-for="(notification, index) in notifications" :key="notification.id" class="notification">
-          <div class="notification-content">
-            <h3>{{ notification.title }}</h3>
-            <p>{{ notification.message }}</p>
-          </div>
-          <button @click="markAsRead(index)">Mark as Read</button>
-        </li>
-      </ul>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    
-    data() {
-      return {
-        notifications: [
-          { id: 1, title: 'New Message', message: 'You have received a new message.', read: false },
-          { id: 2, title: 'System Update', message: 'System update available. Please update your software.', read: false },
-          { id: 3, title: 'Subscription Renewal', message: 'Your subscription will expire soon.', read: false }
-        ]
-      };
-    },
-    methods: {
-      markAsRead(index) {
-        this.notifications[index].read = true;
-        // Optionally remove the notification from the list
-        // this.notifications.splice(index, 1);
+  <div>
+    <h1>TA Notifications</h1>
+    <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
+    <table v-if="notifications.length" class="notification-table">
+      <thead>
+        <tr>
+          <th>Cancel ID</th>
+          <th>Course ID</th>
+          <th>Cancelled Date</th>
+          <th>Cancellation Reason</th>
+          <th>Created At</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="notification in notifications" :key="notification.cancel_id">
+          <td>{{ notification.cancel_id }}</td>
+          <td>{{ notification.course_id }}</td>
+          <td>{{ formatDate(notification.cancelled_date) }}</td>
+          <td>{{ notification.cancellation_reason }}</td>
+          <td>{{ formatDate(notification.created_at) }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div v-else>No notifications available.</div>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+
+export default {
+  name: 'NotificationView',
+  setup() {
+    const notifications = ref([]);
+    const errorMessage = ref('');
+
+    // Fetch TA notifications from the API
+    const fetchNotifications = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:5000/api/ta_notifications', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          }
+        });
+        notifications.value = response.data;
+      } catch (error) {
+        errorMessage.value = 'Error fetching TA notifications: ' + error.message;
       }
-    }
+    };
+
+    // Format date
+    const formatDate = (dateString) => {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      return date.toLocaleDateString();
+    };
+
+    // Call fetchNotifications when component is mounted
+    onMounted(fetchNotifications);
+
+    return {
+      notifications,
+      errorMessage,
+      formatDate
+    };
   }
-  </script>
-  
-  <style scoped>
-  .notification-container {
-    padding: 20px;
-    width: 100%;
-    max-width: 600px;
-    margin: auto;
-  }
-  
-  .notification-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .notification {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .notification-content h3 {
-    margin: 0;
-    color: #333;
-  }
-  
-  .notification-content p {
-    margin: 5px 0;
-    color: #666;
-  }
-  
-  button {
-    padding: 10px 20px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  </style>
-  
+};
+</script>
+
+<style scoped>
+.notification-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.notification-table th, .notification-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.notification-table th {
+  background-color: #f4f4f4;
+}
+
+.error {
+  color: red;
+}
+</style>
