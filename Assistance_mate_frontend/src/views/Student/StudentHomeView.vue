@@ -11,17 +11,17 @@
       <!-- Notification -->
       <router-link to="/teachernotification" class="quick-access-card bg-green-500 hover:bg-green-600 text-white rounded-lg shadow-lg p-6">
         <div class="text-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto mb-4" fill="none" viewBox="0 0 24 24"  color="#ffffff" >
-            <path d="M2.52992 14.7696C2.31727 16.1636 3.268 17.1312 4.43205 17.6134C8.89481 19.4622 15.1052 19.4622 19.5679 17.6134C20.732 17.1312 21.6827 16.1636 21.4701 14.7696C21.3394 13.9129 20.6932 13.1995 20.2144 12.5029C19.5873 11.5793 19.525 10.5718 19.5249 9.5C19.5249 5.35786 16.1559 2 12 2C7.84413 2 4.47513 5.35786 4.47513 9.5C4.47503 10.5718 4.41272 11.5793 3.78561 12.5029C3.30684 13.1995 2.66061 13.9129 2.52992 14.7696Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M8 19C8.45849 20.7252 10.0755 22 12 22C13.9245 22 15.5415 20.7252 16 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto mb-4" viewBox="0 0 24 24"  color="#ffffff" fill="none">
+            <path d="M6.57757 15.4816C5.1628 16.324 1.45336 18.0441 3.71266 20.1966C4.81631 21.248 6.04549 22 7.59087 22H16.4091C17.9545 22 19.1837 21.248 20.2873 20.1966C22.5466 18.0441 18.8372 16.324 17.4224 15.4816C14.1048 13.5061 9.89519 13.5061 6.57757 15.4816Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M16.5 6.5C16.5 8.98528 14.4853 11 12 11C9.51472 11 7.5 8.98528 7.5 6.5C7.5 4.01472 9.51472 2 12 2C14.4853 2 16.5 4.01472 16.5 6.5Z" stroke="currentColor" stroke-width="1.5" />
         </svg>
-          <h2 class="text-xl font-semibold">Notification</h2>
-          <p class="mt-2">Stay updated with the latest notifications</p>
+          <h2 class="text-xl font-semibold">Profile</h2>
+          <p class="mt-2">Edit your Profile</p>
         </div>
       </router-link>
 
       <!-- Evaluate -->
-      <router-link to="/teacherevaluate" class="quick-access-card bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg shadow-lg p-6">
+      <router-link to="/studentevaluate" class="quick-access-card bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg shadow-lg p-6">
         <div class="text-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path d="M14.9805 7.01556C14.9805 7.01556 15.4805 7.51556 15.9805 8.51556C15.9805 8.51556 17.5687 6.01556 18.9805 5.51556" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
