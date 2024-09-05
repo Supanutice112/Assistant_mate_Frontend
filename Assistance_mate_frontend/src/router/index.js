@@ -30,6 +30,7 @@ import StudentLoginView from '@/views/StudentLoginView.vue'
 import StudentProfile from '@/views/Student/StudentProfile.vue'
 import StudentEvaluate from '@/views/Student/StudentEvaluate.vue'
 import EvaluateResultView from '@/views/Staff/EvaluateResultView.vue'
+import TAlistView from '@/views/Staff/TAlistView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -203,7 +204,12 @@ const router = createRouter({
           name: 'evaluateresult',
           path: '/evaluateresult',
           component: EvaluateResultView
-        }
+        },
+        {
+          name: 'talist',
+          path: '/talist',
+          component: TAlistView
+        },
       ]
     }
   ]
