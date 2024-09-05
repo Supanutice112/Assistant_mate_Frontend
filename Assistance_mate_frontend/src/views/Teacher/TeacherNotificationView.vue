@@ -1,26 +1,18 @@
 <template>
   <div>
-    <table>
-      <thead>
-        <tr>
-          <th>Course ID</th>
-          <th>Date</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="notification in filteredNotifications" :key="notification.id">
-          <td>{{ notification.course_id }}</td>
-          <td>{{ notification.date }}</td>
-          <td>{{ notification.status }}</td>
-          <td>
-            <button @click="approveNotification(notification.id)">Approve</button>
-            <button @click="rejectNotification(notification.id)">Reject</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="card-container">
+      <div v-for="notification in filteredNotifications" :key="notification.id" class="card bg-base-100 w-96 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">Course ID: {{ notification.course_id }}</h2>
+          <p>Date: {{ formatDate(notification.date) }}</p>
+          <p>Status: {{ notification.status }}</p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary" @click="approveNotification(notification.id)">Approve</button>
+            <button class="btn btn-secondary" @click="rejectNotification(notification.id)">Reject</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -30,7 +22,10 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      notifications: []
+      notifications: [],
+      loading: true,
+      message: '',
+      error: ''
     };
   },
   computed: {
@@ -48,39 +43,46 @@ export default {
         });
         this.notifications = response.data;
       } catch (error) {
+        this.error = "Failed to load notifications.";
         console.error("Error fetching teacher notifications:", error.response || error.message);
+      } finally {
+        this.loading = false;
       }
+    },
+    formatDate(dateString) {
+      const options = { year: 'numeric', month: 'short', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString(undefined, options);
     },
     async approveNotification(notificationId) {
-      try {
-        const response = await axios.post('http://127.0.0.1:5000/api/approve_notification', {
-          id: notificationId
-        }, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`
-          }
-        });
-        console.log(response.data.message);
-        await this.fetchNotifications(); // Refresh notifications
-      } catch (error) {
-        console.error("Error approving notification:", error.response || error.message);
+  try {
+    await axios.post('http://127.0.0.1:5000/api/approve_notification', {
+      id: notificationId
+    }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`
       }
-    },
+    });
+    this.message = 'Notification approved successfully';
+    await this.fetchNotifications(); // Refresh notifications
+  } catch (error) {
+    console.error("Error approving notification:", error.response || error.message);
+  }
+},
     async rejectNotification(notificationId) {
-      try {
-        const response = await axios.post('http://127.0.0.1:5000/api/reject_notification', {
-          id: notificationId
-        }, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`
-          }
-        });
-        console.log(response.data.message);
-        await this.fetchNotifications(); // Refresh notifications
-      } catch (error) {
-        console.error("Error rejecting notification:", error.response || error.message);
+  try {
+    await axios.post('http://127.0.0.1:5000/api/reject_notification', {
+      id: notificationId
+    }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`
       }
-    }
+    });
+    this.message = 'Notification rejected successfully';
+    await this.fetchNotifications(); // Refresh notifications
+  } catch (error) {
+    console.error("Error rejecting notification:", error.response || error.message);
+  }
+}
   },
   created() {
     this.fetchNotifications();
@@ -89,20 +91,13 @@ export default {
 </script>
 
 <style scoped>
-table {
-  width: 100%;
-  border-collapse: collapse;
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
 }
-th, td {
-  padding: 8px;
-  text-align: left;
-  border: 1px solid #ddd;
-}
-th {
-  background-color: #f4f4f4;
-}
-button {
-  margin: 0 5px;
-  padding: 5px 10px;
+
+.card {
+  margin-bottom: 16px;
 }
 </style>

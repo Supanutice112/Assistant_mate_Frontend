@@ -1,28 +1,22 @@
 <template>
-  <div>
-    <h1>TA Notifications</h1>
-    <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
-    <table v-if="notifications.length" class="notification-table">
-      <thead>
-        <tr>
-          <th>Cancel ID</th>
-          <th>Course ID</th>
-          <th>Cancelled Date</th>
-          <th>Cancellation Reason</th>
-          <th>Created At</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="notification in notifications" :key="notification.cancel_id">
-          <td>{{ notification.cancel_id }}</td>
-          <td>{{ notification.course_id }}</td>
-          <td>{{ formatDate(notification.cancelled_date) }}</td>
-          <td>{{ notification.cancellation_reason }}</td>
-          <td>{{ formatDate(notification.created_at) }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <div v-else>No notifications available.</div>
+  <div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold text-center mb-6 text-blue-600">TA Notifications</h1>
+    
+    <div v-if="errorMessage" class="error text-red-600 text-center mb-4">{{ errorMessage }}</div>
+    
+    <div v-if="notifications.length" class="notification-container">
+      <div v-for="notification in notifications" :key="notification.cancel_id" class="card bg-gradient-to-r from-blue-400 to-purple-500 text-white w-full max-w-lg mx-auto shadow-xl mb-6">
+        <div class="card-body p-6">
+          <h2 class="card-title text-2xl font-bold mb-4">Course ID: {{ notification.course_id }}</h2>
+          <p class="text-lg"><strong>Cancelled Date:</strong> {{ formatDate(notification.cancelled_date) }}</p>
+          <p class="text-lg"><strong>Cancellation Reason:</strong> {{ notification.cancellation_reason }}</p>
+          <p class="text-lg"><strong>Created At:</strong> {{ formatDate(notification.created_at) }}</p>
+
+        </div>
+      </div>
+    </div>
+    
+    <div v-else class="text-center text-gray-500">No notifications available.</div>
   </div>
 </template>
 
@@ -70,21 +64,44 @@ export default {
 </script>
 
 <style scoped>
-.notification-table {
-  width: 100%;
-  border-collapse: collapse;
+.notification-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.notification-table th, .notification-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
+.card {
+  border-radius: 12px;
+  transition: transform 0.3s;
 }
 
-.notification-table th {
-  background-color: #f4f4f4;
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card-body {
+  background: linear-gradient(to right, #667eea, #764ba2);
+  border-radius: 12px;
+  padding: 16px;
+  color: white;
+}
+
+.card-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.btn {
+  background-color: #ff6b81;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #ff4757;
 }
 
 .error {
   color: red;
+  margin-bottom: 20px;
 }
 </style>
