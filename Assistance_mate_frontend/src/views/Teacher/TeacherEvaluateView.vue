@@ -32,29 +32,36 @@
             </td>
           </tr>
           
-          <!-- Question 1 -->
           <tr v-if="selectedCourse && selectedTA">
             <td class="p-3 border-t border-gray-200"><label for="question1" class="font-medium">Responsiveness to Questions?</label></td>
             <td class="p-3 border-t border-gray-200">
-              <input type="number" v-model="question1" min="1" max="5" required class="p-2 border rounded w-full" />
+              <select v-model="question1" class="mt-2 p-2 border rounded w-full" required>
+                <option disabled value="">Please select a score</option>
+                <option v-for="n in 5" :key="n" :value="n">{{ n }}</option>
+              </select>
             </td>
           </tr>
           
-          <!-- Question 2 -->
           <tr v-if="selectedCourse && selectedTA">
             <td class="p-3 border-t border-gray-200"><label for="question2" class="font-medium">Clarity of Explanation?</label></td>
             <td class="p-3 border-t border-gray-200">
-              <input type="number" v-model="question2" min="1" max="5" required class="p-2 border rounded w-full" />
+              <select v-model="question2" class="mt-2 p-2 border rounded w-full" required>
+                <option disabled value="">Please select a score</option>
+                <option v-for="n in 5" :key="n" :value="n">{{ n }}</option>
+              </select>
             </td>
           </tr>
           
-          <!-- Question 3 -->
           <tr v-if="selectedCourse && selectedTA">
             <td class="p-3 border-t border-gray-200"><label for="question3" class="font-medium">How the TA attends classes on time?</label></td>
             <td class="p-3 border-t border-gray-200">
-              <input type="number" v-model="question3" min="1" max="5" required class="p-2 border rounded w-full" />
+              <select v-model="question3" class="mt-2 p-2 border rounded w-full" required>
+                <option disabled value="">Please select a score</option>
+                <option v-for="n in 5" :key="n" :value="n">{{ n }}</option>
+              </select>
             </td>
           </tr>
+          
           
           <!-- Comment -->
           <tr v-if="selectedCourse && selectedTA">

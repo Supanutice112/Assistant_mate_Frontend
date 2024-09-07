@@ -8,7 +8,6 @@ import CalwageView from '@/views/TA/CalwageView.vue'
 import FormView from '@/views/TA/SummaryView.vue'
 import LoginView from '@/views/LoginView.vue'
 import AttendanceView from '@/views/TA/AttendanceView.vue'
-import TaNotificationView from '@/views/TA/TaNotificationView.vue'
 import TeacherDashboardView from '@/views/master/TeacherDashboardView.vue'
 import TeacherHomeView from '@/views/Teacher/TeacherHomeView.vue'
 import TeacherCourseView from '@/views/Teacher/TeacherCourseView.vue'
@@ -112,11 +111,6 @@ const router = createRouter({
           path: '/attendance/:id',  // Updated path with parameter `id`
           component: AttendanceView,
           props: true  // Enables route parameter props
-        },
-        {
-          name: 'Tanotification',
-          path: '/Tanotification',  // This is now '/Teachernotification'
-          component: TaNotificationView
         },
         {
           name: 'taviewattendance',
