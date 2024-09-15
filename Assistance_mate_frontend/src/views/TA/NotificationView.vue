@@ -11,7 +11,6 @@
           <p class="text-lg"><strong>Cancelled Date:</strong> {{ formatDate(notification.cancelled_date) }}</p>
           <p class="text-lg"><strong>Cancellation Reason:</strong> {{ notification.cancellation_reason }}</p>
           <p class="text-lg"><strong>Created At:</strong> {{ formatDate(notification.created_at) }}</p>
-
         </div>
       </div>
     </div>
@@ -38,9 +37,15 @@ export default {
             'Authorization': `Bearer ${localStorage.getItem('access_token')}`
           }
         });
-        notifications.value = response.data;
+        // Assuming the API returns a 'cancellations' key
+        notifications.value = response.data.cancellations || [];
       } catch (error) {
-        errorMessage.value = 'Error fetching TA notifications: ' + error.message;
+        // Capture detailed error response if available
+        if (error.response && error.response.data && error.response.data.message) {
+          errorMessage.value = `Error fetching TA notifications: ${error.response.data.message}`;
+        } else {
+          errorMessage.value = `Error fetching TA notifications: ${error.message}`;
+        }
       }
     };
 
@@ -89,15 +94,6 @@ export default {
 .card-title {
   font-size: 1.75rem;
   font-weight: 600;
-}
-
-.btn {
-  background-color: #ff6b81;
-  transition: background-color 0.3s;
-}
-
-.btn:hover {
-  background-color: #ff4757;
 }
 
 .error {

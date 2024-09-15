@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto p-4">
     <h2 class="text-2xl font-bold mb-4">Course Evaluation</h2>
-    
+
     <!-- Evaluation Form in a Table -->
     <form @submit.prevent="submitEvaluation">
       <table class="w-full bg-white border rounded shadow-md">
@@ -18,7 +18,7 @@
               </select>
             </td>
           </tr>
-          
+
           <!-- TA Selection -->
           <tr v-if="selectedCourse">
             <td class="p-3 border-t border-gray-200"><label for="ta" class="font-medium">Select TA</label></td>
@@ -31,7 +31,8 @@
               </select>
             </td>
           </tr>
-          
+
+          <!-- Evaluation Questions -->
           <tr v-if="selectedCourse && selectedTA">
             <td class="p-3 border-t border-gray-200"><label for="question1" class="font-medium">Responsiveness to Questions?</label></td>
             <td class="p-3 border-t border-gray-200">
@@ -41,7 +42,7 @@
               </select>
             </td>
           </tr>
-          
+
           <tr v-if="selectedCourse && selectedTA">
             <td class="p-3 border-t border-gray-200"><label for="question2" class="font-medium">Clarity of Explanation?</label></td>
             <td class="p-3 border-t border-gray-200">
@@ -51,9 +52,9 @@
               </select>
             </td>
           </tr>
-          
+
           <tr v-if="selectedCourse && selectedTA">
-            <td class="p-3 border-t border-gray-200"><label for="question3" class="font-medium">How the TA attends classes on time?</label></td>
+            <td class="p-3 border-t border-gray-200"><label for="question3" class="font-medium">Punctuality of the TA?</label></td>
             <td class="p-3 border-t border-gray-200">
               <select v-model="question3" class="mt-2 p-2 border rounded w-full" required>
                 <option disabled value="">Please select a score</option>
@@ -61,8 +62,7 @@
               </select>
             </td>
           </tr>
-          
-          
+
           <!-- Comment -->
           <tr v-if="selectedCourse && selectedTA">
             <td class="p-3 border-t border-gray-200"><label for="comment" class="font-medium">Comment</label></td>
@@ -70,18 +70,22 @@
               <textarea v-model="comment" required class="p-2 border rounded w-full" rows="4"></textarea>
             </td>
           </tr>
-          
+
           <!-- Submit Button -->
           <tr v-if="selectedCourse && selectedTA">
             <td class="p-3 border-t border-gray-200"></td>
             <td class="p-3 border-t border-gray-200 text-right">
-              <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+              <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" :disabled="submitting">
                 Submit
               </button>
             </td>
           </tr>
         </tbody>
       </table>
+
+      <!-- Success/Failure Message -->
+      <div v-if="successMessage" class="text-green-600 mt-4">{{ successMessage }}</div>
+      <div v-if="errorMessage" class="text-red-600 mt-4">{{ errorMessage }}</div>
     </form>
   </div>
 </template>
@@ -98,6 +102,9 @@ export default {
       question2: null,
       question3: null,
       comment: '',
+      submitting: false,
+      successMessage: '',
+      errorMessage: ''
     };
   },
   computed: {
@@ -121,6 +128,10 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.courses = data.courses;
+        })
+        .catch(error => {
+          console.error("Error fetching courses:", error);
+          this.errorMessage = "Failed to fetch courses.";
         });
     },
     fetchTAs() {
@@ -132,9 +143,23 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.tas = data.tas;
+        })
+        .catch(error => {
+          console.error("Error fetching TAs:", error);
+          this.errorMessage = "Failed to fetch TAs.";
         });
     },
     submitEvaluation() {
+      const averageScore = this.averageScore;
+      if (!averageScore) {
+        this.errorMessage = "Please complete all the evaluation questions.";
+        return;
+      }
+
+      this.submitting = true; // Disable submit button while submitting
+      this.successMessage = '';
+      this.errorMessage = '';
+
       fetch("http://127.0.0.1:5000/api/evaluate", {
         method: "POST",
         headers: {
@@ -143,27 +168,42 @@ export default {
         },
         body: JSON.stringify({
           ta_id: this.selectedTA,
-          score: this.averageScore,
+          score: averageScore,
           comment: this.comment,
           course_id: this.selectedCourse,
         }),
       })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === "success") {
-            alert("Evaluation submitted successfully!");
-            this.selectedCourse = null;
-            this.selectedTA = null;
-            this.question1 = null;
-            this.question2 = null;
-            this.question3 = null;
-            this.comment = '';
-            this.tas = [];
-          } else {
-            alert("Failed to submit evaluation.");
-          }
-        });
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error submitting evaluation.");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.status === "success" || data.status === 201) {
+          this.successMessage = "Evaluation submitted successfully!";
+          this.resetForm();
+        } else {
+          this.errorMessage = "Failed to submit evaluation.";
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        this.errorMessage = "Failed to submit evaluation. Please try again.";
+      })
+      .finally(() => {
+        this.submitting = false;
+      });
     },
+    resetForm() {
+      this.selectedCourse = null;
+      this.selectedTA = null;
+      this.question1 = null;
+      this.question2 = null;
+      this.question3 = null;
+      this.comment = '';
+      this.tas = [];
+    }
   },
   mounted() {
     this.fetchCourses();
@@ -183,10 +223,6 @@ table {
   padding: auto;
 }
 
-thead th {
-  background-color: #f3f4f6;
-}
-
 td, th {
   padding: 14px;
 }
@@ -199,7 +235,20 @@ button {
   transition: background-color 0.3s ease;
 }
 
+button[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 button:hover {
   background-color: #2563eb;
+}
+
+.text-green-600 {
+  color: green;
+}
+
+.text-red-600 {
+  color: red;
 }
 </style>
