@@ -69,6 +69,11 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  max-height: 85vh; /* Adjust as needed */
+  overflow-y: auto;
+}
+
 .notification-container {
   display: flex;
   flex-direction: column;

@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       checkInData: {
-        course_id: '',
+        course_id: '',  // Ensure this matches the backend field name
         date: '',
         startTime: '',
         endTime: ''
@@ -74,12 +74,12 @@ export default {
       this.loading = true;
       try {
         const response = await axios.post('http://127.0.0.1:5000/api/checkin', {
-          course_id: this.courseId,
+          course_id: this.checkInData.course_id,  // Ensure this matches the backend field name
           date: this.checkInData.date,
           startTime: this.checkInData.startTime,
           endTime: this.checkInData.endTime
         }, {
-          withCredentials: true, // Ensure credentials are sent
+          withCredentials: true,
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('access_token')}`

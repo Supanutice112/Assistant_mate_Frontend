@@ -125,7 +125,6 @@ export default {
 .footer {
   padding: 1rem;
   text-align: center;
-  background-color: #ffffff;
 }
 
 .button {

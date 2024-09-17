@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="notifications-container">
     <div v-if="message" class="alert alert-success">{{ message }}</div>
     <div v-if="error" class="alert alert-error">{{ error }}</div>
 
@@ -12,15 +12,18 @@
         <div
           v-for="notification in filteredNotifications"
           :key="notification.id"
-          class="card bg-base-100 w-96 shadow-xl"
+          class="card bg-base-100 w-full shadow-xl"
         >
           <div class="card-body">
-            <h2 class="card-title">Course ID: {{ notification.course_id }}</h2>
+            <h2 class="card-title">Course: {{ notification.course_name }}</h2>
+            <p>Course ID: {{ notification.course_id }}</p>
+            <p>TA Name: {{ notification.ta_name }}</p>
             <p>Date: {{ formatDate(notification.date) }}</p>
             <p>Status: {{ notification.status }}</p>
             <div class="card-actions justify-end">
-              <button class="btn btn-primary" @click="approveNotification(notification.id)">Approve</button>
-              <button class="btn btn-secondary" @click="rejectNotification(notification.id)">Reject</button>
+              <button class="btn bg-green-500 text-white hover:bg-green-600" @click="approveNotification(notification.id)">Approve</button>
+              <button class="btn bg-red-500 text-white hover:bg-red-600" @click="rejectNotification(notification.id)">Reject</button>
+
             </div>
           </div>
         </div>
@@ -60,7 +63,6 @@ export default {
             Authorization: `Bearer ${localStorage.getItem('access_token')}`
           }
         });
-        // Assuming the notifications are returned under `response.data.notifications`
         this.notifications = response.data.notifications || [];
       } catch (error) {
         this.error = 'Failed to load notifications.';
@@ -77,9 +79,7 @@ export default {
       try {
         await axios.post(
           'http://127.0.0.1:5000/api/approve_notification',
-          {
-            id: notificationId
-          },
+          { id: notificationId },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('access_token')}`
@@ -99,9 +99,7 @@ export default {
       try {
         await axios.post(
           'http://127.0.0.1:5000/api/reject_notification',
-          {
-            id: notificationId
-          },
+          { id: notificationId },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('access_token')}`
@@ -125,30 +123,60 @@ export default {
 </script>
 
 <style scoped>
+.notifications-container {
+  max-height: calc(95vh - 4rem); /* Adjust height to fit within the viewport */
+  overflow-y: auto; /* Enable scrolling if content exceeds the container's height */
+  padding: 1rem;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically if content height is less than container height */
+}
+
 .card-container {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 16px;
+  width: 500px;
 }
 
 .card {
   margin-bottom: 16px;
 }
 
+.alert-success, .alert-error {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 1.5rem;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  border-radius: 8px;
+  width: 300px;
+  text-align: center;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out; /* Smooth fade out effect */
+}
+
 .alert-success {
   background-color: #d4edda;
   color: #155724;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  text-align: center;
 }
 
 .alert-error {
   background-color: #f8d7da;
   color: #721c24;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  text-align: center;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 
 .loading {
@@ -156,4 +184,23 @@ export default {
   color: #888;
   text-align: center;
 }
+
+.btn-approve {
+  background-color: #28a745; /* Green */
+  color: white;
+}
+
+.btn-approve:hover {
+  background-color: #218838; /* Darker green */
+}
+
+.btn-reject {
+  background-color: #dc3545; /* Red */
+  color: white;
+}
+
+.btn-reject:hover {
+  background-color: #c82333; /* Darker red */
+}
+
 </style>

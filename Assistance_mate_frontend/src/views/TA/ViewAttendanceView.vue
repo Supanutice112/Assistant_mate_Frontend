@@ -2,32 +2,34 @@
   <div class="h-full bg-white rounded-lg shadow-lg p-8">
     <h1 class="text-3xl font-bold mb-8 text-center text-primary">Attendance History</h1>
     <div class="overflow-x-auto">
-      <table class="min-w-full bg-white border border-gray-200 shadow-sm">
-        <thead class="bg-gray-200">
-          <tr>
-            <th class="py-4 px-6 text-left text-gray-600 font-semibold uppercase text-sm">#</th>
-            <th class="py-4 px-6 text-left text-gray-600 font-semibold uppercase text-sm">Course ID</th>
-            <th class="py-4 px-6 text-left text-gray-600 font-semibold uppercase text-sm">Date</th>
-            <th class="py-4 px-6 text-left text-gray-600 font-semibold uppercase text-sm">Start Time</th>
-            <th class="py-4 px-6 text-left text-gray-600 font-semibold uppercase text-sm">End Time</th>
-            <th class="py-4 px-6 text-left text-gray-600 font-semibold uppercase text-sm">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(record, index) in attendanceRecords" :key="record.id" class="border-t hover:bg-gray-100 even:bg-gray-50">
-            <td class="py-4 px-6">{{ index + 1 }}</td>
-            <td class="py-4 px-6">{{ record.course_id }}</td>
-            <td class="py-4 px-6">{{ record.date }}</td>
-            <td class="py-4 px-6">{{ record.start_time }}</td>
-            <td class="py-4 px-6">{{ record.end_time }}</td>
-            <td class="py-4 px-6">
-              <span :class="statusClass(record.status)">
-                {{ record.status }}
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="max-h-screen overflow-y-auto">
+        <table class="min-w-full bg-white border border-gray-200 shadow-sm">
+          <thead class="bg-gray-200">
+            <tr>
+              <th class="py-4 px-6 text-left text-gray-600 font-semibold uppercase text-sm">#</th>
+              <th class="py-4 px-6 text-left text-gray-600 font-semibold uppercase text-sm">Course ID</th>
+              <th class="py-4 px-6 text-left text-gray-600 font-semibold uppercase text-sm">Date</th>
+              <th class="py-4 px-6 text-left text-gray-600 font-semibold uppercase text-sm">Start Time</th>
+              <th class="py-4 px-6 text-left text-gray-600 font-semibold uppercase text-sm">End Time</th>
+              <th class="py-4 px-6 text-left text-gray-600 font-semibold uppercase text-sm">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(record, index) in attendanceRecords" :key="record.id" class="border-t hover:bg-gray-100 even:bg-gray-50">
+              <td class="py-4 px-6">{{ index + 1 }}</td>
+              <td class="py-4 px-6">{{ record.course_id }}</td>
+              <td class="py-4 px-6">{{ record.date }}</td>
+              <td class="py-4 px-6">{{ record.start_time }}</td>
+              <td class="py-4 px-6">{{ record.end_time }}</td>
+              <td class="py-4 px-6">
+                <span :class="statusClass(record.status)">
+                  {{ record.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -75,6 +77,16 @@ export default {
 </script>
 
 <style scoped>
+/* Container for the table with vertical scrolling enabled */
+.max-h-screen {
+  max-height: 75vh; /* Adjust this value as needed */
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+/* Ensure the table takes up full width and maintains proper styling */
 .min-w-full {
   width: 100%;
   border-collapse: collapse;

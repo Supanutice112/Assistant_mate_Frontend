@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 p-6">
+    <div class="min-h-screen flex flex-col items-center justify-center bg-photo-background">
       <!-- Welcome Header -->
       <header class="mb-8 text-center">
         <h1 class="text-3xl font-bold text-green-700">Welcome to Assistant Mate</h1>
@@ -92,6 +92,14 @@ button {
 
 button:hover {
   background-color: #1e40af; /* Darker Tailwind Blue */
+}
+
+.bg-photo-background {
+  background-image: url('https://img.freepik.com/free-photo/financial-background-with-spiral-notebook_1101-789.jpg?t=st=1725971026~exp=1725974626~hmac=4ad79a5be92671d2ac1fd060233b9d4c46650af77947f5b92ef7eb9c66f2b89b&w=2000');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 </style>
     
