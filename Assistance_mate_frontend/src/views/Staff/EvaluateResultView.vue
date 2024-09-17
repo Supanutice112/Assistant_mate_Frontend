@@ -14,7 +14,7 @@
       <button 
         @click="fetchEvaluationResults" 
         :disabled="!selectedTA" 
-        class="bg-gradient-to-r from-orange-500 to-teal-500 text-white px-6 py-3 rounded-lg shadow-lg hover:from-orange-600 hover:to-teal-600 disabled:bg-gray-400 transition duration-300"
+        class="bg-gradient-to-r from-teal-500 to-teal-500 text-white px-6 py-3 rounded-lg shadow-lg hover:from-teal-600 hover:to-teal-600 disabled:bg-gray-400 transition duration-300"
       >
         Show Evaluation Results
       </button>
@@ -25,7 +25,7 @@
       <!-- Teacher Evaluations -->
       <h3 class="text-2xl font-semibold text-orange-700 mb-6">Teacher Evaluations</h3>
       <table class="min-w-full bg-white table-auto mb-8">
-        <thead class="bg-gradient-to-r from-orange-500 to-teal-500 text-white">
+        <thead class="bg-gradient-to-r from-teal-500 to-teal-500 text-white">
           <tr>
             <th class="px-6 py-3">Teacher</th>
             <th class="px-6 py-3">Average Score</th>
@@ -39,7 +39,7 @@
             <td class="px-6 py-4">
               <button 
                 @click="toggleDetails('teacher', teacherEvaluation.Teacher_name)" 
-                class="bg-gradient-to-r from-orange-500 to-teal-500 text-white px-4 py-2 rounded-lg hover:from-orange-600 hover:to-teal-600 transition duration-300"
+                class="bg-gradient-to-r from-teal-500 to-teal-500 text-white px-4 py-2 rounded-lg hover:from-teal-600 hover:to-teal-600 transition duration-300"
               >
                 Show Details
               </button>
