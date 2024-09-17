@@ -3,14 +3,13 @@
     <h1 class="text-3xl font-bold text-center mb-6 text-blue-600">TA Notifications</h1>
     
     <div v-if="errorMessage" class="error text-red-600 text-center mb-4">{{ errorMessage }}</div>
-
-    <!-- Notification List -->
-    <div v-if="notifications.length" class="notification-container max-h-screen overflow-y-auto">
-      <div v-for="notification in notifications" :key="notification.cancel_id" class="notification-card bg-gradient-to-r from-blue-400 to-purple-500 text-white mb-4 rounded-lg shadow-xl">
-        <div class="p-4 max-h-48 overflow-y-auto">
-          <h2 class="text-xl font-bold mb-2">Course ID: {{ notification.course_id }}</h2>
-          <p class="text-lg mb-1"><strong>Cancelled Date:</strong> {{ formatDate(notification.cancelled_date) }}</p>
-          <p class="text-lg mb-1"><strong>Cancellation Reason:</strong> {{ notification.cancellation_reason }}</p>
+    
+    <div v-if="notifications.length" class="notification-container">
+      <div v-for="notification in notifications" :key="notification.cancel_id" class="card bg-gradient-to-r from-blue-400 to-purple-500 text-white w-full max-w-lg mx-auto shadow-xl mb-6">
+        <div class="card-body p-6">
+          <h2 class="card-title text-2xl font-bold mb-4">Course ID: {{ notification.course_id }}</h2>
+          <p class="text-lg"><strong>Cancelled Date:</strong> {{ formatDate(notification.cancelled_date) }}</p>
+          <p class="text-lg"><strong>Cancellation Reason:</strong> {{ notification.cancellation_reason }}</p>
           <p class="text-lg"><strong>Created At:</strong> {{ formatDate(notification.created_at) }}</p>
         </div>
       </div>
@@ -38,9 +37,15 @@ export default {
             'Authorization': `Bearer ${localStorage.getItem('access_token')}`
           }
         });
-        notifications.value = response.data;
+        // Assuming the API returns a 'cancellations' key
+        notifications.value = response.data.cancellations || [];
       } catch (error) {
-        errorMessage.value = 'Error fetching TA notifications: ' + error.message;
+        // Capture detailed error response if available
+        if (error.response && error.response.data && error.response.data.message) {
+          errorMessage.value = `Error fetching TA notifications: ${error.response.data.message}`;
+        } else {
+          errorMessage.value = `Error fetching TA notifications: ${error.message}`;
+        }
       }
     };
 
@@ -67,59 +72,32 @@ export default {
 .notification-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center items horizontally */
+  gap: 20px;
 }
 
-.notification-card {
-  border-radius: 10px;
+.card {
+  border-radius: 12px;
   transition: transform 0.3s;
 }
 
-.notification-card:hover {
-  transform: scale(1.02);
+.card:hover {
+  transform: scale(1.05);
 }
 
-.notification-card-body {
-  background: linear-gradient(to right, #8396ea, #a267dd);
+.card-body {
+  background: linear-gradient(to right, #667eea, #764ba2);
   border-radius: 12px;
   padding: 16px;
   color: white;
 }
 
 .card-title {
-  font-size: 1.5rem;
-  font-weight: 400;
+  font-size: 1.75rem;
+  font-weight: 600;
 }
 
 .error {
   color: red;
   margin-bottom: 20px;
-}
-
-.max-h-screen {
-  max-height: 80vh; /* Ensure the container fits the screen height */
-}
-
-.overflow-y-auto {
-  overflow-y: auto; /* Enable vertical scrolling */
-}
-
-.notification-card {
-  
-  max-height: 200px; /* Limit the height of each card */
-  width: 400px;
-}
-
-.notification-card-body {
-  max-height: 100%; /* Ensure card body fits within the card height */
-  overflow-y: auto; /* Scroll within the card if content is too long */
-}
-
-.text-lg {
-  font-size: 1.125rem;
-}
-
-.text-xl {
-  font-size: 1.25rem;
 }
 </style>

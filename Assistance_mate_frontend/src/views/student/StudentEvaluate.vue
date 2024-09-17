@@ -67,7 +67,7 @@
             </td>
           </tr>
 
-          <!-- Question 3: Attendance -->
+          <!-- Question 3: Punctuality of Attendance -->
           <tr v-if="evaluation.course && evaluation.section && evaluation.taName">
             <td class="p-3 border-t border-gray-200"><label for="question3" class="font-medium">Punctuality of Attendance (1-5)</label></td>
             <td class="p-3 border-t border-gray-200">
@@ -192,34 +192,34 @@ export default {
       }
     },
     async submitEvaluation() {
-  const evaluationPayload = {
-    name: this.evaluation.name,
-    course: this.evaluation.course,
-    section: this.evaluation.section,
-    taName: this.evaluation.taName,
-    score: this.averageScore,  // Store the average score as the final score
-    comment: this.evaluation.comment
-  };
+      const evaluationPayload = {
+        name: this.evaluation.name,
+        course: this.evaluation.course,
+        section: this.evaluation.section,
+        taName: this.evaluation.taName,
+        score: this.averageScore,  // Store the average score as the final score
+        comment: this.evaluation.comment
+      };
 
-  // Debugging log to check payload before submission
-  console.log("Payload being submitted: ", evaluationPayload);
+      // Debugging log to check payload before submission
+      console.log("Payload being submitted: ", evaluationPayload);
 
-  try {
-    const response = await axios.post('http://127.0.0.1:5000/api/evaluate_ta', evaluationPayload);
-    if (response.status === 200) {
-      this.message = 'Evaluation submitted successfully.';
-      this.success = true;
-      this.resetForm();
-    } else {
-      this.message = 'Failed to submit evaluation.';
-      this.success = false;
-    }
-  } catch (error) {
-    console.error('Error submitting evaluation:', error);
-    this.message = 'Error submitting evaluation. Please try again.';
-    this.success = false;
-  }
-},
+      try {
+        const response = await axios.post('http://127.0.0.1:5000/api/evaluate_ta', evaluationPayload);
+        if (response.status === 200) {
+          this.message = 'Evaluation submitted successfully.';
+          this.success = true;
+          this.resetForm();
+        } else {
+          this.message = 'Failed to submit evaluation.';
+          this.success = false;
+        }
+      } catch (error) {
+        console.error('Error submitting evaluation:', error);
+        this.message = 'Error submitting evaluation. Please try again.';
+        this.success = false;
+      }
+    },
     resetForm() {
       this.evaluation = {
         name: this.evaluation.name,  // Keep the name from the logged-in user
