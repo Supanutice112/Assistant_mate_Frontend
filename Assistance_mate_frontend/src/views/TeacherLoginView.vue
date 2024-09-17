@@ -3,7 +3,7 @@
       <!-- Welcome Header -->
       <header class="mb-8 text-center">
         <h1 class="text-3xl font-bold text-green-700">Welcome to Assistant Mate</h1>
-        <p class="text-gray-600">Please login to continue</p>
+        <p class="text-gray-600">Please login to continues</p>
       </header>
       <!-- Teacher Login -->
       <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-md text-center">
