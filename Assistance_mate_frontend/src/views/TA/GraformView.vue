@@ -1,7 +1,9 @@
 <template>
-  <div class="p-4">
-    <h2 class="text-xl font-bold mb-4">Disburstment form for Graduate</h2>
-    <table class="table-auto w-full border-collapse border border-gray-300">
+  <div class="p-4 max-w-6xl mx-auto shadow-lg rounded-lg bg-white">
+    <h2 class="text-2xl font-bold mb-4 text-gray-800">Disbursement form for Graduate</h2>
+    <div v-if="error" class="text-red-500">{{ error }}</div>
+    <div v-if="loading" class="text-center">Loading attendance records...</div>
+    <table v-else class="table-auto w-full border-collapse border border-gray-300">
       <thead>
         <tr class="bg-gray-200">
           <th class="border border-gray-300 p-2">Name</th>
@@ -28,13 +30,20 @@
       </tbody>
       <tfoot>
         <tr class="bg-gray-100">
-          <td colspan="4" class="border border-gray-300 p-2 font-bold text-right">Total Amoung</td>
+          <td colspan="4" class="border border-gray-300 p-2 font-bold text-right">Total Amount</td>
           <td class="border border-gray-300 p-2 font-bold text-right">{{ totalAmount }}</td>
           <td colspan="3" class="border border-gray-300 p-2 font-bold text-center">({{ totalAmountText }})</td>
         </tr>
       </tfoot>
     </table>
-    <router-link to="/form" class="button">Back</router-link>
+
+    <div class="mt-6 flex justify-between">
+      <!-- Back button -->
+      <router-link to="/form" class="button bg-gray-600 hover:bg-gray-800">Back</router-link>
+
+      <!-- Print button -->
+      <button @click="printForm" class="button bg-blue-600 hover:bg-blue-800">Print</button>
+    </div>
   </div>
 </template>
 
@@ -46,7 +55,7 @@ export default {
       totalAmount: 0,
       totalAmountText: '',
       loading: false,
-      error: null
+      error: null,
     };
   },
   created() {
@@ -142,75 +151,146 @@ export default {
     formatDate(dateString) {
       const options = { day: '2-digit', month: 'short', year: 'numeric' };
       return new Date(dateString).toLocaleDateString('en-GB', options);
+    },
+    printForm() {
+      window.print();
     }
   }
 };
 </script>
 
 <style scoped>
-.button {
-  display: inline-block;
-  padding: 0.75rem 1.25rem;
-  border-radius: 10rem;
+.p-4 {
+  padding: 1rem;
+}
+
+.max-w-6xl {
+  max-width: 72rem;
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.rounded-lg {
+  border-radius: 0.75rem;
+}
+
+.bg-white {
+  background-color: #fff;
+}
+
+.text-gray-800 {
+  color: #2d3748;
+}
+
+.text-gray-700 {
+  color: #4a5568;
+}
+
+.bg-gray-600 {
+  background-color: #4a5568;
+}
+
+.bg-gray-800 {
+  background-color: #2d3748;
+}
+
+.bg-blue-600 {
+  background-color: #3182ce;
+}
+
+.bg-blue-800 {
+  background-color: #2b6cb0;
+}
+
+.text-white {
   color: #fff;
-  background-color: #007bff;
-  text-transform: uppercase;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.table-auto {
+  table-layout: auto;
+}
+
+.border-collapse {
+  border-collapse: collapse;
+}
+
+.border {
+  border-width: 1px;
+}
+
+.border-gray-300 {
+  border-color: #d2d6dc;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.hover\:bg-gray-100:hover {
+  background-color: #f7fafc;
+}
+
+.transition-colors {
+  transition: background-color 0.2s;
+}
+
+.button {
+  padding: 0.75rem 1.5rem;
+  color: white;
+  border-radius: 50px;
   font-size: 1rem;
-  letter-spacing: 0.15rem;
-  transition: all 0.3s;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.button:after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #007bff;
-  border-radius: 10rem;
-  z-index: -2;
-}
-
-.button:before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0%;
-  height: 100%;
-  background-color: #0056b3;
-  transition: all 0.3s;
-  border-radius: 10rem;
-  z-index: -1;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  transition: background-color 0.3s ease;
 }
 
 .button:hover {
-  color: #fff;
+  cursor: pointer;
 }
 
-.button:hover:before {
-  width: 100%;
+.flex {
+  display: flex;
 }
 
-/* Additional Styles */
-.table-auto {
-  margin-top: 20px;
-  font-size: 16px;
+.justify-between {
+  justify-content: space-between;
 }
 
-thead th {
-  font-weight: bold;
+.ml-4 {
+  margin-left: 1rem;
 }
 
-tfoot td {
-  font-weight: bold;
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.hover\\:bg-gray-100:hover {
-  background-color: #f7fafc;
+.text-center {
+  text-align: center;
 }
+
+
 </style>

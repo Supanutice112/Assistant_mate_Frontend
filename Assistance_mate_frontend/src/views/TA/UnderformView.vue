@@ -1,34 +1,41 @@
 <template>
-  <div class="p-4">
-    <h2 class="text-xl font-bold mb-4">Attendance Records</h2>
+  <div class="p-4 max-w-6xl mx-auto shadow-lg rounded-lg bg-white">
+    <h2 class="text-2xl font-bold mb-4 text-gray-800">Disbursement form for UnderGraduate</h2>
     <div v-if="error" class="text-red-500">{{ error }}</div>
     <div v-if="loading" class="text-center">Loading attendance records...</div>
     <table v-else class="table-auto w-full border-collapse border border-gray-300">
       <thead>
-        <tr class="bg-gray-200">
-          <th class="border border-gray-300 p-2">Date</th>
-          <th class="border border-gray-300 p-2">Start Time</th>
-          <th class="border border-gray-300 p-2">TA Name</th>
-          <th class="border border-gray-300 p-2">End Time</th>
-          <th class="border border-gray-300 p-2">Hours Worked</th>
-          <th class="border border-gray-300 p-2">Course</th>
-          <th class="border border-gray-300 p-2">งานที่ปฎิบัติ</th>
+        <tr class="bg-blue-600 text-white">
+          <th class="border border-gray-300 p-4">Date</th>
+          <th class="border border-gray-300 p-4">Start Time</th>
+          <th class="border border-gray-300 p-4">TA Name</th>
+          <th class="border border-gray-300 p-4">End Time</th>
+          <th class="border border-gray-300 p-4">Hours Worked</th>
+          <th class="border border-gray-300 p-4">Course</th>
+          <th class="border border-gray-300 p-4">Note</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(record, index) in transformedAttendance" :key="index" class="hover:bg-gray-100">
-          <td class="border border-gray-300 p-2">{{ formatDate(record.date) }}</td>
-          <td class="border border-gray-300 p-2">{{ record.start_time }}</td>
-          <td class="border border-gray-300 p-2">{{ record.ta_name }}</td>
-          <td class="border border-gray-300 p-2">{{ record.end_time }}</td>
-          <td class="border border-gray-300 p-2">{{ record.hours_worked }}</td>
-          <td class="border border-gray-300 p-2">{{ record.course_id }}</td>
-          <td class="border border-gray-300 p-2">{{ record.work_done }}</td>
+        <tr v-for="(record, index) in transformedAttendance" :key="index" class="hover:bg-gray-100 transition-colors">
+          <td class="border border-gray-300 p-3 text-center">{{ formatDate(record.date) }}</td>
+          <td class="border border-gray-300 p-3 text-center">{{ record.start_time }}</td>
+          <td class="border border-gray-300 p-3 text-center">{{ record.ta_name }}</td>
+          <td class="border border-gray-300 p-3 text-center">{{ record.end_time }}</td>
+          <td class="border border-gray-300 p-3 text-center">{{ record.hours_worked }}</td>
+          <td class="border border-gray-300 p-3 text-center">{{ record.course_id }}</td>
+          <td class="border border-gray-300 p-3 text-center">{{ record.work_done }}</td>
         </tr>
       </tbody>
     </table>
-    <div class="mt-4 font-bold">Total Hours Worked: {{ totalHoursWorked }} hours</div>
-    <router-link to="/form" class="button">Back</router-link>
+    <div class="mt-6 font-bold text-gray-700 text-right text-xl">Total Hours Worked: {{ totalHoursWorked }} hours</div>
+
+    <div class="mt-6 flex justify-between">
+      <!-- Back button -->
+      <router-link to="/form" class="button bg-gray-600 hover:bg-gray-800">Back</router-link>
+
+      <!-- Print button -->
+      <button @click="printForm" class="button bg-blue-600 hover:bg-blue-800">Print</button>
+    </div>
   </div>
 </template>
 
@@ -45,24 +52,21 @@ export default {
     transformedAttendance() {
       let transformed = [];
 
-      // Define the time slots and the hours worked
       const timeSlots = [
         { start: "08:00", end: "10:00", hours: 2 },
         { start: "10:00", end: "12:00", hours: 2 },
         { start: "13:00", end: "18:00", hours: 5 },
       ];
 
-      // Group by date
       let groupedByDate = this.attendance.reduce((acc, record) => {
         if (!acc[record.date]) acc[record.date] = [];
         acc[record.date].push(record);
         return acc;
       }, {});
 
-      // Transform each group
       for (const records of Object.values(groupedByDate)) {
         for (const slot of timeSlots) {
-          const record = records[0]; // Use the first record as a template
+          const record = records[0]; 
           transformed.push({
             date: record.date,
             start_time: slot.start,
@@ -78,9 +82,8 @@ export default {
       return transformed;
     },
     totalHoursWorked() {
-      // Calculate total hours worked by summing up all the hours
       return this.transformedAttendance.reduce((total, record) => {
-        const hours = parseInt(record.hours_worked.split('h')[0], 10); // Extract hours as integer
+        const hours = parseInt(record.hours_worked.split('h')[0], 10);
         return total + hours;
       }, 0);
     }
@@ -112,89 +115,143 @@ export default {
       const options = { day: "2-digit", month: "short", year: "numeric" };
       return new Date(dateString).toLocaleDateString("en-GB", options);
     },
+    printForm() {
+      window.print();
+    }
   },
 };
 </script>
 
 <style scoped>
-.button {
-  display: inline-block;
-  padding: 0.75rem 1.25rem;
-  border-radius: 10rem;
+.p-4 {
+  padding: 1rem;
+}
+
+.max-w-6xl {
+  max-width: 72rem;
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.rounded-lg {
+  border-radius: 0.75rem;
+}
+
+.bg-white {
+  background-color: #fff;
+}
+
+.text-gray-800 {
+  color: #2d3748;
+}
+
+.text-gray-700 {
+  color: #4a5568;
+}
+
+.bg-gray-600 {
+  background-color: #4a5568;
+}
+
+.bg-gray-800 {
+  background-color: #2d3748;
+}
+
+.bg-blue-600 {
+  background-color: #3182ce;
+}
+
+.bg-blue-800 {
+  background-color: #2b6cb0;
+}
+
+.text-white {
   color: #fff;
-  text-transform: uppercase;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.table-auto {
+  table-layout: auto;
+}
+
+.border-collapse {
+  border-collapse: collapse;
+}
+
+.border {
+  border-width: 1px;
+}
+
+.border-gray-300 {
+  border-color: #d2d6dc;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.hover\:bg-gray-100:hover {
+  background-color: #f7fafc;
+}
+
+.transition-colors {
+  transition: background-color 0.2s;
+}
+
+.button {
+  padding: 0.75rem 1.5rem;
+  color: white;
+  border-radius: 50px;
   font-size: 1rem;
-  letter-spacing: 0.15rem;
-  transition: all 0.3s;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.button:after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #007bff; /* Set your button color here */
-  border-radius: 10rem;
-  z-index: -2;
-}
-
-.button:before {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0%;
-  height: 100%;
-  background-color: #0056b3; /* Darker color for hover effect */
-  transition: all 0.3s;
-  border-radius: 10rem;
-  z-index: -1;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  transition: background-color 0.3s ease;
 }
 
 .button:hover {
-  color: #fff;
+  cursor: pointer;
 }
 
-.button:hover:before {
-  width: 100%;
+.flex {
+  display: flex;
 }
 
-/* Optional reset for presentation */
-* {
-  font-family: Arial, sans-serif;
-  text-decoration: none;
-  font-size: 20px;
+.justify-between {
+  justify-content: space-between;
 }
 
-.container {
-  padding-top: 50px;
-  margin: 0 auto;
-  width: 100%;
+.ml-4 {
+  margin-left: 1rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.text-center {
   text-align: center;
-}
-
-h1 {
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  margin-bottom: 2rem;
-  color: #777;
-}
-
-span {
-  display: block;
-  margin-top: 2rem;
-  font-size: 0.7rem;
-  color: #777;
-}
-
-span a {
-  font-size: 0.7rem;
-  color: #999;
-  text-decoration: underline;
 }
 </style>
